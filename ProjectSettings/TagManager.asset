@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -43,6 +44,9 @@ TagManager:
     locked: 0
   - name: Background
     uniqueID: 3866520941
+    locked: 0
+  - name: Bombs
+    uniqueID: 109237787
     locked: 0
   - name: Entities
     uniqueID: 2118546067
