@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class GridManager : MonoBehaviour
 {
-    private Grid<PathNode> grid;
+    private Board<PathNode> grid;
 
     public int width;
     public int height;
@@ -17,6 +17,6 @@ public class GridManager : MonoBehaviour
 
     void Start()
     {
-        grid = new Grid<PathNode>(transform, width, height, cellSizeX = 1, cellSizeY = 1, (Grid<PathNode> g, int x, int y) => new PathNode(g, x, y));
+        grid = new Board<PathNode>(transform, width, height, cellSizeX = 1, cellSizeY = 1, (Board<PathNode> g, int x, int y) => new PathNode(g, x, y));
     }
 }
