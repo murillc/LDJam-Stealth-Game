@@ -12,6 +12,8 @@ public class PathNode
     public int hCost;
     public int fCost;
 
+    public bool isWalkable;
+
     public PathNode previousNode;
 
     public PathNode(Board<PathNode> grid, int x, int y)
@@ -19,6 +21,8 @@ public class PathNode
         this.grid = grid;
         this.x = x;
         this.y = y;
+
+        isWalkable = true;
     }
 
     public void CalculateFCost()

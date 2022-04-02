@@ -58,6 +58,7 @@ public class EnemyMovement : MonoBehaviour
             // angle between enemy and player
             Vector3 vectorToPlayer = (player.transform.position - transform.position).normalized;
             
+
             // player within fov
             if (Vector3.Angle(vectorToPlayer, GetVectorFromAngle(aimAngle)) < fov / 2f) {
                 RaycastHit2D raycastHit2D = Physics2D.Raycast(transform.position, vectorToPlayer, viewDistance);
