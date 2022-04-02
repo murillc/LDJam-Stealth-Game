@@ -45,6 +45,12 @@ TagManager:
   - name: Background
     uniqueID: 3866520941
     locked: 0
+  - name: House
+    uniqueID: 4167135329
+    locked: 0
+  - name: House Furniture
+    uniqueID: 3036578791
+    locked: 0
   - name: Bombs
     uniqueID: 109237787
     locked: 0
