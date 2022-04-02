@@ -48,6 +48,9 @@ TagManager:
   - name: House
     uniqueID: 4167135329
     locked: 0
+  - name: House Walls
+    uniqueID: 2004754497
+    locked: 0
   - name: House Furniture
     uniqueID: 3036578791
     locked: 0

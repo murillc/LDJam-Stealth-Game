@@ -8,6 +8,7 @@ public class FieldOfView : MonoBehaviour
     [SerializeField] float viewDistance = 8f;
     private Mesh mesh;
     private Vector3 origin = Vector3.zero;
+
     [SerializeField] private float startingAngle = 0f;
     private float fov = 40f;
 
@@ -16,12 +17,13 @@ public class FieldOfView : MonoBehaviour
     {
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
+        GetComponent<MeshCollider>().sharedMesh = mesh;
     }
 
     void LateUpdate()
     {
         int rayCount = 50;
-        float angle = startingAngle;
+        float angle = startingAngle + fov / 2f;
         float angleIncrease = fov / rayCount;
         
 
@@ -67,6 +69,13 @@ public class FieldOfView : MonoBehaviour
         mesh.uv = uv;
         mesh.triangles = triangles;
         mesh.bounds = new Bounds(origin, Vector3.one * 1000f);
+
+
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("Collision detected");
     }
 
     private static Vector3 GetVectorFromAngle(float angleDeg)
@@ -92,6 +101,21 @@ public class FieldOfView : MonoBehaviour
     public void SetAimDirection(Vector3 aimDirection)
     {
         this.startingAngle = GetAngleFromVector(aimDirection) - fov / 2f;
+    }
+
+    public void SetAimDirectionFloat(float aimAngle)
+    {
+        this.startingAngle = aimAngle;
+    }
+
+    public void SetViewDistance(float viewDistance)
+    {
+        this.viewDistance = viewDistance;
+    }
+
+    public void SetFOV(float fov)
+    {
+        this.fov = fov;
     }
 
 }
