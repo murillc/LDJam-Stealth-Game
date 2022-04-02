@@ -21,27 +21,27 @@ public class Grid<T> : MonoBehaviour
 
     private T[,] gridArray;
 
-    private GridManager gridManager;
+    private Transform parentTransform;
 
-    public Grid(GridManager gridManager, int width, int height, float cellSizeX, float cellSizeY, Func<Grid<T>, int, int, T> createGridObject)
+    public Grid(Transform parentTransform, int width, int height, float cellSizeX, float cellSizeY, Func<Grid<T>, int, int, T> createGridObject)
     {
         this.width = width;
         this.height = height;
         this.cellSizeX = cellSizeX;
         this.cellSizeY = cellSizeY;
-        this.gridManager = gridManager;
+        this.parentTransform = parentTransform;
 
         gridArray = new T[width, height];
 
         for (int x = 0; x < gridArray.GetLength(0); x++)
             for (int y = 0; y < gridArray.GetLength(1); y++)
             {
-                GameObject newCell = Instantiate(gridManager.cell, gridManager.transform);
+                GameObject newCell = Instantiate(Resources.Load("Prefabs/Cell") as GameObject, parentTransform);
 
                 Transform cellT = newCell.GetComponent<Transform>();
 
                 //Spawn depending on parent position, place in array, and with half width and height offset because the pivot is in the center instead of bottom left, spawning them incorrectly
-                cellT.position = new Vector3(gridManager.transform.position.x + (x * cellSizeX) + cellSizeX / 2, gridManager.transform.position.y + (y * cellSizeY) + cellSizeY / 2, 0);
+                cellT.position = new Vector3(parentTransform.position.x + (x * cellSizeX) + cellSizeX / 2, parentTransform.position.y + (y * cellSizeY) + cellSizeY / 2, 0);
 
                 TextMeshPro textMesh = newCell.GetComponentInChildren<TextMeshPro>();
                 textMesh.text = "[" + x + ", " + y + "]";
@@ -79,5 +79,15 @@ public class Grid<T> : MonoBehaviour
         {
             return default(T);
         }
+    }
+
+    public int GetWidth()
+    {
+        return width;
+    }
+
+    public int GetHeight()
+    {
+        return height;
     }
 }
