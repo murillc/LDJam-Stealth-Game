@@ -12,26 +12,72 @@ public class GridDisplay : Singleton<GridDisplay>
 
     public GameObject[,] allCells;
 
+    private void Update()
+    {
+        if (allCells == null)
+            return;
+
+        if (display == false)
+            return;
+
+        //do once every 120 frames
+        if (Utility.RateLimiter(120))
+        {
+            for (int i = 0; i < allCells.GetLength(0); i++)
+                for (int j = 0; j < allCells.GetLength(1); j++)
+                {
+                    if (Vector3.Distance(player.transform.position, allCells[i, j].transform.position) < 3.0f)
+                        allCells[i, j].SetActive(true);
+                    else
+                        allCells[i, j].SetActive(false);
+                }
+        }
+    }
+
     public void ToggleGridDisplay()
     {
-        if (display == true)
-        {
-            for (int i = 0; i < allCells.GetLength(0); i++)
-                for (int j = 0; j < allCells.GetLength(1); j++)
+        //if (display == true)
+        //{
+        //    for (int i = 0; i < allCells.GetLength(0); i++)
+        //        for (int j = 0; j < allCells.GetLength(1); j++)
+        //        {
+        //            allCells[i, j].SetActive(false);
+        //            display = false;
+        //        }
+        //}
+        //else if (display == false)
+        //{
+        //    for (int i = 0; i < allCells.GetLength(0); i++)
+        //        for (int j = 0; j < allCells.GetLength(1); j++)
+        //        {
+        //            allCells[i, j].SetActive(true);
+        //            display = true;
+        //        }
+        //}
+    }
+
+    public void SetDisplayGrid(bool display)
+    {
+        for (int i = 0; i < allCells.GetLength(0); i++)
+            for (int j = 0; j < allCells.GetLength(1); j++)
+            {
+                if (display)
                 {
+                    //allCells[i, j].SetActive(true);
+                }
+                else if (!display)
                     allCells[i, j].SetActive(false);
-                    display = false;
-                }
-        }
-        else if (display == false)
-        {
-            for (int i = 0; i < allCells.GetLength(0); i++)
-                for (int j = 0; j < allCells.GetLength(1); j++)
-                {
-                    allCells[i, j].SetActive(true);
-                    display = true;
-                }
-        }
+            }
+    }
+
+    public void ToggleDisplay()
+    {
+        if (!display)
+            display = true;
+        else
+            display = false;
+
+        SetDisplayGrid(display);
     }
 
     public void CreateCell(int x, int y, float cellSize, bool walkable)
