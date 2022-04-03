@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnemyMovement : MonoBehaviour
 {
     [SerializeField] private float _moveSpeed;
+    
     public float MoveSpeed { get { return _moveSpeed; } set { _moveSpeed = MoveSpeed; } }
 
     [SerializeField] private Transform prefabFieldOfView;
@@ -93,7 +94,7 @@ public class EnemyMovement : MonoBehaviour
             case State.Retreating:
                 {
                     // TODO make him retreat to an entry / exit point
-                    SetTargetPosition(new Vector3(0f, 0f));
+                    SetTargetPosition(new Vector3(31f, 4f));
                     if (LocateTargetPlayer()) { state = State.Chasing; }
                     break;
                 }
@@ -175,7 +176,7 @@ public class EnemyMovement : MonoBehaviour
 
             transform.position = transform.position + moveDir * MoveSpeed * Time.deltaTime;
 
-            if (state == State.Roaming)
+            if (state == State.Roaming || state == State.Retreating)
             {
                 aimAngle = GetAngleFromVector(moveDir);
             }
