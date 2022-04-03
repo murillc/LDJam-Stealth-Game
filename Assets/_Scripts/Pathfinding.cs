@@ -7,6 +7,9 @@ public class Pathfinding
     private const int MOVE_STRAIGHT_COST = 10;
     private const int MOVE_DIAGONAL_COST = 14;
 
+    private int width;
+    private int height;
+
     public static Pathfinding Instance { get; private set; }
 
     private Board grid;
@@ -17,6 +20,9 @@ public class Pathfinding
 
     public Pathfinding(Vector3 originPosition, int width, int height, float cellSize)
     {
+        this.width = width;
+        this.height = height;
+
         Instance = this;
         grid = new Board(originPosition, width, height, cellSize);
     }
@@ -191,5 +197,15 @@ public class Pathfinding
                 cheapestFCostPathNode = pathNodeList[i];
 
         return cheapestFCostPathNode;
+    }
+
+    public int GetWidth()
+    {
+        return width;
+    }
+
+    public int GetHeight()
+    {
+        return height;
     }
 }

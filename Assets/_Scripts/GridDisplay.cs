@@ -6,35 +6,56 @@ using UnityEngine;
 using UnityEngine.UI;
 public class GridDisplay : Singleton<GridDisplay>
 {
-    [SerializeField] public bool display = true;
+    public GameObject player;
 
-    List<GameObject> allCells;
+    [SerializeField] public bool display = false;
 
-    public void ToggleDisplay()
+    public GameObject[,] allCells;
+
+    public void ToggleGridDisplay()
     {
-        foreach (var cell in allCells)
+        if (display == true)
         {
-            if (display == true)
-            {
-                cell.gameObject.SetActive(false);
-                display = false;
-            }
-            else
-            {
-                cell.gameObject.SetActive(true);
-                display = true;
-            }
+            for (int i = 0; i < allCells.GetLength(0); i++)
+                for (int j = 0; j < allCells.GetLength(1); j++)
+                {
+                    allCells[i, j].SetActive(false);
+                    display = false;
+                }
+        }
+        else if (display == false)
+        {
+            for (int i = 0; i < allCells.GetLength(0); i++)
+                for (int j = 0; j < allCells.GetLength(1); j++)
+                {
+                    allCells[i, j].SetActive(true);
+                    display = true;
+                }
         }
     }
 
-    public void CreateCell(int x, int y, float cellSize)
+    public void CreateCell(int x, int y, float cellSize, bool walkable)
     {
         if (allCells == null)
-            allCells = new List<GameObject>();
+            allCells = new GameObject[Pathfinding.Instance.GetWidth(), Pathfinding.Instance.GetHeight()];
 
-        GameObject newCell = Instantiate(Resources.Load("Prefabs/Cell") as GameObject, transform);
-        allCells.Add(newCell);
+        allCells[x, y] = Instantiate(Resources.Load("Prefabs/Cell") as GameObject, transform);
 
-        Transform cellT = newCell.GetComponent<Transform>();
+        Transform cellT = allCells[x, y].GetComponent<Transform>();
+
+        //Spawn depending on parent position, place in array, and with half width and height offset because the pivot is in the center instead of bottom left, spawning them incorrectly
+        cellT.position = new Vector3(transform.position.x + (x * cellSize) + cellSize / 2, transform.position.y + (y * cellSize) + cellSize / 2, 0);
+
+        TextMeshPro textMesh = allCells[x, y].GetComponentInChildren<TextMeshPro>();
+        textMesh.text = "[" + x + ", " + y + "]";
+
+        allCells[x, y].SetActive(false);
+    }
+
+    public void SetUnWalkableColor(int x, int y)
+    {
+        Debug.Log("X: " + x + " Y: " + y);
+        SpriteRenderer spriteRenderer = allCells[x, y].GetComponentInChildren<SpriteRenderer>();
+        spriteRenderer.color = new Color(0.9607843f, 0.2313726f, 0.3411765f, 0.3490196f);
     }
 }

@@ -16,11 +16,11 @@ public class PathfindingManager : MonoBehaviour
 
     private void Start()
     {
-        //foreach (var position in unWalkableTilemap.cellBounds.allPositionsWithin)
-        //{
-        //    // Do stuff per position
-        //}
+        SetUnWalkableTiles();
+    }
 
+    private void SetUnWalkableTiles()
+    {
         for (int i = unWalkableTilemap.cellBounds.xMin; i < unWalkableTilemap.cellBounds.xMax; i++)
         {
             if (i > pathfinding.GetGrid().nodeArray.GetLength(0))
@@ -36,16 +36,10 @@ public class PathfindingManager : MonoBehaviour
 
                 if (unWalkableTilemap.GetSprite(localPos) != null)
                 {
-                    Debug.Log("MADE TILE UNWALKABLE: " + worldPos);
+                    GridDisplay.instance.SetUnWalkableColor((int)worldPos.x, (int)worldPos.y);
                     pathfinding.GetGrid().nodeArray[(int)worldPos.x, (int)worldPos.y].SetWalkable(false);
-                }
+                } 
             }
         }
-
-    }
-
-    private void Update()
-    {
-
     }
 }

@@ -34,10 +34,9 @@ public class Board
         for (int x = 0; x < nodeArray.GetLength(0); x++)
             for (int y = 0; y < nodeArray.GetLength(1); y++)
             {
-                if (GridDisplay.instance.display == true)
-                    GridDisplay.instance.CreateCell(x, y, cellSize);
-
                 nodeArray[x, y] = new PathNode(this, x, y);
+
+                GridDisplay.instance.CreateCell(x, y, cellSize, nodeArray[x, y].isWalkable);
             }
 
         OnGridObjectChanged += (object sender, OnGridObjectChangedEventArgs eventArgs) => 
