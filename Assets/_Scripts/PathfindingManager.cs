@@ -1,37 +1,51 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class PathfindingManager : MonoBehaviour
 {
-    //[SerializeField] private EnemyMovement enemyMovement;
+    public Tilemap unWalkableTilemap;
 
     private Pathfinding pathfinding;
 
     private void Awake()
     {
-        pathfinding = new Pathfinding(transform.position, 40, 20, 1);
+        pathfinding = new Pathfinding(transform.position, 50, 30, 1);
     }
 
     private void Start()
     {
-        //enemyMovement.SetTargetPosition(new Vector3(3, 2, 0));
+        //foreach (var position in unWalkableTilemap.cellBounds.allPositionsWithin)
+        //{
+        //    // Do stuff per position
+        //}
+
+        for (int i = unWalkableTilemap.cellBounds.xMin; i < unWalkableTilemap.cellBounds.xMax; i++)
+        {
+            if (i > pathfinding.GetGrid().nodeArray.GetLength(0))
+                break;
+
+            for (int j = unWalkableTilemap.cellBounds.yMin; j < unWalkableTilemap.cellBounds.yMax; j++)
+            {
+                if (j > pathfinding.GetGrid().nodeArray.GetLength(1))
+                    break;
+
+                Vector3Int localPos = new Vector3Int(i, j, (int)unWalkableTilemap.transform.position.z);
+                Vector3 worldPos = unWalkableTilemap.CellToWorld(localPos);
+
+                if (unWalkableTilemap.GetSprite(localPos) != null)
+                {
+                    Debug.Log("MADE TILE UNWALKABLE: " + worldPos);
+                    pathfinding.GetGrid().nodeArray[(int)worldPos.x, (int)worldPos.y].SetWalkable(false);
+                }
+            }
+        }
+
     }
 
     private void Update()
     {
 
-    }
-
-    public void MakePath(int startX, int startY, int endX, int endY)
-    {
-        List<PathNode> path = pathfinding.FindPath(startX, startY, endX, endY);
-        //Debug.Log(path.Count);
-
-        if (path != null)
-            foreach(PathNode node in path)
-            {
-                //Debug.Log(node.x + " " + node.y);
-            }
     }
 }

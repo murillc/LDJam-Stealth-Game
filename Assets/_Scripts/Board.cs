@@ -18,13 +18,9 @@ public class Board
 
     private float cellSize;
 
-    public GameObject cell;
-
     private Vector3 originPosition;
 
-    private PathNode[,] gridArray;
-
-    //public GameObject[,] cells;
+    public PathNode[,] nodeArray;
 
     public Board(Vector3 originPosition, int width, int height, float cellSize)
     {
@@ -33,13 +29,13 @@ public class Board
         this.cellSize = cellSize;
         this.originPosition = originPosition;
 
-        gridArray = new PathNode[width, height];
+        nodeArray = new PathNode[width, height];
 
-        for (int x = 0; x < gridArray.GetLength(0); x++)
-            for (int y = 0; y < gridArray.GetLength(1); y++)
+        for (int x = 0; x < nodeArray.GetLength(0); x++)
+            for (int y = 0; y < nodeArray.GetLength(1); y++)
             {
                 GridDisplay.instance.CreateCell(x, y, cellSize);
-                gridArray[x, y] = new PathNode(this, x, y);
+                nodeArray[x, y] = new PathNode(this, x, y);
             }
 
         OnGridObjectChanged += (object sender, OnGridObjectChangedEventArgs eventArgs) => 
@@ -78,7 +74,7 @@ public class Board
     {
         if (x >= 0 && y >= 0 && x < width && y < height)
         {
-            gridArray[x, y] = value;
+            nodeArray[x, y] = value;
             if (OnGridObjectChanged != null) OnGridObjectChanged(this, new OnGridObjectChangedEventArgs { x = x, y = y });
         }
     }
@@ -99,7 +95,7 @@ public class Board
     {
         if (x >= 0 && y >= 0 && x < width && y < height)
         {
-            return gridArray[x, y];
+            return nodeArray[x, y];
         }
         else
         {
