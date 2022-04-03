@@ -18,11 +18,13 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private const float detectionTime = 5f;
     private float timer = 0f;
 
+    private const float trapTime = 5f;
+
     private GameObject player;
 
-    enum State
+    public enum State
     {
-        Roaming, Chasing, Retreating
+        Roaming, Chasing, Retreating, Trapped
     }
     private State state = State.Roaming;
 
@@ -81,6 +83,20 @@ public class EnemyMovement : MonoBehaviour
                     }
                     break;
             }
+            case State.Trapped:
+                {
+                    // Stay still
+                    SetTargetPosition(transform.position);
+                    aimAngle -= rotationSpeed * Time.deltaTime;
+                    break;
+                }
+            case State.Retreating:
+                {
+                    // TODO make him retreat to an entry / exit point
+                    SetTargetPosition(new Vector3(0f, 0f));
+                    if (LocateTargetPlayer()) { state = State.Chasing; }
+                    break;
+                }
             default: break;
         }
         
@@ -88,7 +104,25 @@ public class EnemyMovement : MonoBehaviour
         HandleMovement();
         // Must update view cone after handling movement
         UpdateViewCone();
+    
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Trap")
+        {
+            // TODO play sound cream
+            state = State.Trapped;
+            StartCoroutine(Retreat());
+        }
+    }
+
+    IEnumerator Retreat()
+    {
+        yield return new WaitForSeconds(trapTime);
+        state = State.Retreating;
+    }
+
 
     private void UpdateViewCone()
     {
@@ -189,5 +223,10 @@ public class EnemyMovement : MonoBehaviour
         {
             pathVectorList.RemoveAt(0);
         }
+    }
+
+    public void SetState(State state)
+    {
+        this.state = state;
     }
 }

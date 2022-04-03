@@ -53,8 +53,8 @@ public class Pathfinding
         PathNode startNode = grid.GetGridObject(startX, startY);
         PathNode endNode = grid.GetGridObject(endX, endY);
 
-        Debug.Log("STARTNODE: " + startNode);
-        Debug.Log("ENDNODE: " + endNode);
+        //Debug.Log("STARTNODE: " + startNode);
+        //Debug.Log("ENDNODE: " + endNode);
 
         if (startNode == null || endNode == null)
         {

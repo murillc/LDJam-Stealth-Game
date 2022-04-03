@@ -16,11 +16,4 @@ public class Trap : MonoBehaviour
         
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.tag == "Enemy")
-        {
-            Debug.Log("Trap triggered by enemy");
-        }
-    }
 }
