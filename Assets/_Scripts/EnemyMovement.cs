@@ -15,7 +15,16 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private float aimAngle = 0f;
     [SerializeField] float rotationSpeed = 10f;
 
+    [SerializeField] private const float detectionTime = 5f;
+    private float timer = 0f;
+
     private GameObject player;
+
+    enum State
+    {
+        Roaming, Chasing, Retreating
+    }
+    private State state = State.Roaming;
 
     [SerializeField] private Vector3 _moveTarget;
     public Vector3 MoveTarget { get { return _moveTarget; } set { _moveTarget = MoveTarget; } }
@@ -44,13 +53,41 @@ public class EnemyMovement : MonoBehaviour
         // Vector3 enemyPos = transform.position;
 
         //transform.position = new Vector3(enemyPos.x + MoveSpeed * Time.deltaTime, enemyPos.y, enemyPos.z);
+        switch (state)
+        {
+            case State.Roaming:
+            {
+                    SetTargetPosition(_moveTarget);
+                    if (LocateTargetPlayer()) { state = State.Chasing; }
+                    break;
+            }
+            case State.Chasing:
+            {
+                SetTargetPosition(player.transform.position);
+                    aimAngle = GetAngleFromVector((player.transform.position - transform.position).normalized);
+                    
+                    if (!LocateTargetPlayer())
+                    {
+                        timer += Time.deltaTime;
+                        Debug.Log("Timer: " + timer);
+                    } else
+                    {
+                        timer = 0;
+                    }
 
-        UpdateViewCone();
-
-        LocateTargetPlayer();
-
+                    if (timer > detectionTime)
+                    {
+                        state = State.Roaming;
+                    }
+                    break;
+            }
+            default: break;
+        }
+        
+        
         HandleMovement();
-
+        // Must update view cone after handling movement
+        UpdateViewCone();
     }
 
     private void UpdateViewCone()
@@ -60,7 +97,7 @@ public class EnemyMovement : MonoBehaviour
         
     }
 
-    private void LocateTargetPlayer()
+    private bool LocateTargetPlayer()
     {
         // player in distance
         if (Vector2.Distance(transform.position, player.transform.position) < viewDistance)
@@ -75,12 +112,15 @@ public class EnemyMovement : MonoBehaviour
 
                 if (raycastHit2D.collider.gameObject.tag == "Player")
                 {
-                    Debug.Log(raycastHit2D.collider.gameObject.tag);
+                    
+                    return true;
                 }
                 
                    
             }
         }
+
+        return false;
     }
 
     public void HandleMovement()
@@ -100,6 +140,12 @@ public class EnemyMovement : MonoBehaviour
             float distanceBefore = Vector3.Distance(transform.position, targetPosition);
 
             transform.position = transform.position + moveDir * MoveSpeed * Time.deltaTime;
+
+            if (state == State.Roaming)
+            {
+                aimAngle = GetAngleFromVector(moveDir);
+            }
+            
         }
         else
         {
@@ -122,6 +168,15 @@ public class EnemyMovement : MonoBehaviour
     {
         float angleRad = angleDeg * (Mathf.PI / 180f);
         return new Vector3(Mathf.Cos(angleRad), Mathf.Sin(angleRad));
+    }
+
+    private static float GetAngleFromVector(Vector3 vector)
+    {
+        vector = vector.normalized;
+        float n = Mathf.Atan2(vector.y, vector.x) * Mathf.Rad2Deg;
+        if (n < 0) n += 360;
+
+        return n;
     }
 
     public void SetTargetPosition(Vector3 targetPosition)

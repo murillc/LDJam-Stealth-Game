@@ -64580,6 +64580,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5589528230058471704, guid: 1756dd008ac03674094a0368f7578e38, type: 3}
+      propertyPath: speed
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5589528230058471704, guid: 1756dd008ac03674094a0368f7578e38, type: 3}
       propertyPath: fieldOfView
       value: 
       objectReference: {fileID: 1669258490}
