@@ -9,7 +9,7 @@ public class Pathfinding
 
     public static Pathfinding Instance { get; private set; }
 
-    private Board<PathNode> grid;
+    private Board grid;
 
     private List<PathNode> openList;
     private HashSet<PathNode> closedList;
@@ -18,10 +18,10 @@ public class Pathfinding
     public Pathfinding(Vector3 originPosition, int width, int height, float cellSize)
     {
         Instance = this;
-        grid = new Board<PathNode>(originPosition, width, height, cellSize, (Board<PathNode> g, int x, int y) => new PathNode(g, x, y));
+        grid = new Board(originPosition, width, height, cellSize);
     }
 
-    public Board<PathNode> GetGrid()
+    public Board GetGrid()
     {
         return grid;
     }

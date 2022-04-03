@@ -17,6 +17,9 @@ public class EnemyMovement : MonoBehaviour
 
     private GameObject player;
 
+    [SerializeField] private Vector3 _moveTarget;
+    public Vector3 MoveTarget { get { return _moveTarget; } set { _moveTarget = MoveTarget; } }
+
     //Pathfinding
     private int currentPathIndex;
     private List<Vector3> pathVectorList;
@@ -31,6 +34,8 @@ public class EnemyMovement : MonoBehaviour
         fieldOfView.SetAimDirectionFloat(aimAngle);
         fieldOfView.SetViewDistance(viewDistance);
         fieldOfView.SetOrigin(transform.position);
+
+        SetTargetPosition(_moveTarget);
     }
 
     // Update is called once per frame

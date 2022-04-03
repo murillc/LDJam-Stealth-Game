@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PathfindingManager : MonoBehaviour
 {
-    [SerializeField] private EnemyMovement enemyMovement;
+    //[SerializeField] private EnemyMovement enemyMovement;
 
     private Pathfinding pathfinding;
 
@@ -15,7 +15,7 @@ public class PathfindingManager : MonoBehaviour
 
     private void Start()
     {
-        enemyMovement.SetTargetPosition(new Vector3(5.0f, 5.0f, 0.0f));
+        //enemyMovement.SetTargetPosition(new Vector3(3, 2, 0));
     }
 
     private void Update()

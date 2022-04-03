@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class Board<T>
+public class Board
 {
     public event EventHandler<OnGridObjectChangedEventArgs> OnGridObjectChanged;
     public class OnGridObjectChangedEventArgs : EventArgs
@@ -22,24 +22,24 @@ public class Board<T>
 
     private Vector3 originPosition;
 
-    private T[,] gridArray;
+    private PathNode[,] gridArray;
 
     //public GameObject[,] cells;
 
-    public Board(Vector3 originPosition, int width, int height, float cellSize, Func<Board<T>, int, int, T> createGridObject)
+    public Board(Vector3 originPosition, int width, int height, float cellSize)
     {
         this.width = width;
         this.height = height;
         this.cellSize = cellSize;
         this.originPosition = originPosition;
 
-        gridArray = new T[width, height];
+        gridArray = new PathNode[width, height];
 
         for (int x = 0; x < gridArray.GetLength(0); x++)
             for (int y = 0; y < gridArray.GetLength(1); y++)
             {
                 GridDisplay.instance.CreateCell(x, y, cellSize);
-                gridArray[x, y] = createGridObject(this, x, y);
+                gridArray[x, y] = new PathNode(this, x, y);
             }
 
         OnGridObjectChanged += (object sender, OnGridObjectChangedEventArgs eventArgs) => 
@@ -74,7 +74,7 @@ public class Board<T>
         y = Mathf.FloorToInt((worldPosition + originPosition).y / cellSize);
     }
 
-    public void SetGridObject(int x, int y, T value)
+    public void SetGridObject(int x, int y, PathNode value)
     {
         if (x >= 0 && y >= 0 && x < width && y < height)
         {
@@ -88,14 +88,14 @@ public class Board<T>
         if (OnGridObjectChanged != null) OnGridObjectChanged(this, new OnGridObjectChangedEventArgs { x = x, y = y });
     }
 
-    public void SetGridObject(Vector3 worldPosition, T value)
+    public void SetGridObject(Vector3 worldPosition, PathNode value)
     {
         int x, y;
         GetXY(worldPosition, out x, out y);
         SetGridObject(x, y, value);
     }
 
-    public T GetGridObject(int x, int y)
+    public PathNode GetGridObject(int x, int y)
     {
         if (x >= 0 && y >= 0 && x < width && y < height)
         {
@@ -104,11 +104,11 @@ public class Board<T>
         else
         {
             Debug.Log("X: " + x + " Y: " + y);
-            return default(T);
+            return default(PathNode);
         }
     }
 
-    public T GetGridObject(Vector3 worldPosition)
+    public PathNode GetGridObject(Vector3 worldPosition)
     {
         int x, y;
         GetXY(worldPosition, out x, out y);

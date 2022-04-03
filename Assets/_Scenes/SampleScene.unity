@@ -64403,6 +64403,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 6922353123809595462, guid: f1d16e4195330614a9f09494f63373fa, type: 3}
+      propertyPath: _moveTarget.x
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6922353123809595462, guid: f1d16e4195330614a9f09494f63373fa, type: 3}
+      propertyPath: _moveTarget.y
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 6922353123809595463, guid: f1d16e4195330614a9f09494f63373fa, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -64599,6 +64607,14 @@ PrefabInstance:
     - target: {fileID: 6922353123809595462, guid: f1d16e4195330614a9f09494f63373fa, type: 3}
       propertyPath: aimAngle
       value: -30
+      objectReference: {fileID: 0}
+    - target: {fileID: 6922353123809595462, guid: f1d16e4195330614a9f09494f63373fa, type: 3}
+      propertyPath: _moveTarget.x
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6922353123809595462, guid: f1d16e4195330614a9f09494f63373fa, type: 3}
+      propertyPath: _moveTarget.y
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6922353123809595463, guid: f1d16e4195330614a9f09494f63373fa, type: 3}
       propertyPath: m_RootOrder

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PathNode
 {
-    private Board<PathNode> grid;
+    private Board grid;
     public int x;
     public int y;
 
@@ -16,7 +16,7 @@ public class PathNode
 
     public PathNode previousNode;
 
-    public PathNode(Board<PathNode> grid, int x, int y)
+    public PathNode(Board grid, int x, int y)
     {
         this.grid = grid;
         this.x = x;
