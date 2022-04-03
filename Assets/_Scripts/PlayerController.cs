@@ -14,12 +14,11 @@ public class PlayerController : MonoBehaviour
     private bool hidingTrigger;
     private GameObject hidingSpot;
 
-    public enum State
+    private enum State
     {
         Roaming, Hiding
     }
     State state = State.Roaming;
-    public bool seen = false;
 
     // Start is called before the first frame update
     void Start()
@@ -56,6 +55,7 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.CompareTag("HideSpot"))
         {
+            Debug.Log("HIDESPOT ENTER");
             hidingTrigger = true;
             hidingSpot = collision.gameObject;
         }
@@ -79,8 +79,7 @@ public class PlayerController : MonoBehaviour
     {
         if (value.isPressed && state == State.Hiding)
         {
-            Vector2 exitPoint = hidingSpot.GetComponent<HidingSpot>().GetExitPoint();
-            transform.position = new Vector3(transform.position.x + exitPoint.x, transform.position.y + exitPoint.y);
+            transform.position = new Vector3(30f, 10f);
             state = State.Roaming;
             rb.bodyType = RigidbodyType2D.Dynamic;
         }
@@ -95,12 +94,5 @@ public class PlayerController : MonoBehaviour
             } 
             
         }
-
-        
-    }
-
-    public State GetState()
-    {
-        return state;
     }
 }

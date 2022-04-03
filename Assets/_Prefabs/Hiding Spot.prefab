@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6999087115389204840}
   - component: {fileID: 472059999}
   - component: {fileID: 472060000}
-  m_Layer: 2
+  m_Layer: 6
   m_Name: Hiding Spot
   m_TagString: HideSpot
   m_Icon: {fileID: 0}
