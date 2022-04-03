@@ -10,13 +10,12 @@ public class PathfindingManager : MonoBehaviour
 
     private void Awake()
     {
-        pathfinding = new Pathfinding(Vector3.zero, 30, 30, 1);
+        pathfinding = new Pathfinding(-transform.position, 30, 30, 1);
     }
 
     private void Start()
     {
         enemyMovement.SetTargetPosition(new Vector3(5.0f, 5.0f, 0.0f));
-        MakePath(0, 0, 8, 3);
     }
 
     private void Update()

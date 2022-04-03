@@ -123,14 +123,10 @@ public class EnemyMovement : MonoBehaviour
     {
         currentPathIndex = 0;
 
-        //THIS IS BECAUSE IF THE TRANSFORM IS NEGATIVE, IT DOES NOT WORK.
-        Debug.Log("YOOOOOOOOOOOOOOOOOOOO: " + transform.position);
-
         pathVectorList = Pathfinding.Instance.FindPath(transform.position, targetPosition);
 
         if (pathVectorList != null && pathVectorList.Count > 1)
         {
-            Debug.Log("pathVectorList NOT null");
             pathVectorList.RemoveAt(0);
         }
     }

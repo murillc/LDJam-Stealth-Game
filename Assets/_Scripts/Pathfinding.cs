@@ -12,7 +12,8 @@ public class Pathfinding
     private Board<PathNode> grid;
 
     private List<PathNode> openList;
-    private List<PathNode> closedList;
+    private HashSet<PathNode> closedList;
+    //private List<PathNode> closedList;
 
     public Pathfinding(Vector3 originPosition, int width, int height, float cellSize)
     {
@@ -62,7 +63,7 @@ public class Pathfinding
         }
 
         openList = new List<PathNode> { startNode };
-        closedList = new List<PathNode>();
+        closedList = new HashSet<PathNode>();
 
         for (int x = 0; x < grid.GetWidth(); x++)
         {
