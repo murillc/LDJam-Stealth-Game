@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour
     private bool hidingTrigger;
     private GameObject hidingSpot;
 
-    private enum State
+    public enum State
     {
         Roaming, Hiding
     }
@@ -94,5 +94,10 @@ public class PlayerController : MonoBehaviour
             } 
             
         }
+    }
+
+    public State GetState()
+    {
+        return state;
     }
 }
