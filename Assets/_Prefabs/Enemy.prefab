@@ -46,12 +46,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 496aa7adc84acd54ead5ef740b24f1e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 64
   _moveSpeed: 2.5
   prefabFieldOfView: {fileID: 3930853195403470097, guid: efa7e9623112abf40984a9fa4e92a0d3, type: 3}
   viewDistance: 8
   fov: 40
-  aimAngle: 0
+  aimAngle: -30
   rotationSpeed: 90
+  _moveTarget: {x: 3, y: 2, z: 0}
 --- !u!212 &6922353123809595456
 SpriteRenderer:
   m_ObjectHideFlags: 0

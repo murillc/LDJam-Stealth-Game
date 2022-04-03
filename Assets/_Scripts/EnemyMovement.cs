@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
 {
+    [SerializeField] LayerMask layerMask;
+
     [SerializeField] private float _moveSpeed;
     
     public float MoveSpeed { get { return _moveSpeed; } set { _moveSpeed = MoveSpeed; } }
@@ -16,16 +18,22 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private float aimAngle = 0f;
     [SerializeField] float rotationSpeed = 10f;
 
-    [SerializeField] private const float detectionTime = 5f;
+    private const float detectionTime = 10f;
     private float timer = 0f;
 
     private const float trapTime = 5f;
 
     private GameObject player;
 
+    // Player hiding variables
+    private bool playerHiding = false;
+    private bool seenPlayerNotHiding = false;
+
+    private bool inSight = false;
+
     public enum State
     {
-        Roaming, Chasing, Retreating, Trapped
+        Roaming, Chasing, Confused, Retreating, Trapped
     }
     private State state = State.Roaming;
 
@@ -56,6 +64,14 @@ public class EnemyMovement : MonoBehaviour
         // Vector3 enemyPos = transform.position;
 
         //transform.position = new Vector3(enemyPos.x + MoveSpeed * Time.deltaTime, enemyPos.y, enemyPos.z);
+        if (player.GetComponent<PlayerController>().GetState() == PlayerController.State.Hiding)
+        {
+            playerHiding = true;
+        } else
+        {
+            playerHiding = false;
+        }
+
         switch (state)
         {
             case State.Roaming:
@@ -66,16 +82,56 @@ public class EnemyMovement : MonoBehaviour
             }
             case State.Chasing:
             {
-                SetTargetPosition(player.transform.position);
+                    SetTargetPosition(player.transform.position);
                     aimAngle = GetAngleFromVector((player.transform.position - transform.position).normalized);
-                    
-                    if (!LocateTargetPlayer())
+
+                    if (LocateTargetPlayer())
                     {
-                        timer += Time.deltaTime;
-                        Debug.Log("Timer: " + timer);
+                        // On first sighting 
+                        if (!inSight)
+                        {
+                            inSight = true;
+
+                            // If player was hiding on first sighting
+                            if (playerHiding)
+                            {
+                                seenPlayerNotHiding = false;
+                            } else
+                            {
+                                seenPlayerNotHiding = true;
+                                Debug.Log("Seen player not hiding");
+                            }
+                        }
+                        // continues to be in sight
+                        else if (inSight) {
+                            if (playerHiding)
+                            {
+                                if (seenPlayerNotHiding)
+                                {
+                                    Debug.Log("Keep going!");
+                                    // TODO speed up
+                                }
+                                else
+                                {
+                                    state = State.Confused;
+                                }
+                            }
+                            else
+                            {
+
+                                timer = 0;
+                            }
+                        }
+                        
+                        
                     } else
                     {
-                        timer = 0;
+                        if (timer > 0.5f)
+                        {
+                            Debug.Log("Lost sight...");
+                            inSight = false;
+                        } 
+                        timer += Time.deltaTime;
                     }
 
                     if (timer > detectionTime)
@@ -84,11 +140,37 @@ public class EnemyMovement : MonoBehaviour
                     }
                     break;
             }
+            case State.Confused:
+                {
+                    SetTargetPosition(transform.position);
+
+
+                    aimAngle -= rotationSpeed * Time.deltaTime;
+
+                    if (LocateTargetPlayer())
+                    {
+                        if (!playerHiding)
+                        {
+                            timer = 0;
+                            state = State.Chasing;
+                        }
+                    }
+                    else
+                    {
+
+                        timer += Time.deltaTime;
+                    }
+
+                    if (timer > detectionTime)
+                    {
+                        state = State.Roaming;
+                    }
+                    break;
+                }
             case State.Trapped:
                 {
                     // Stay still
                     SetTargetPosition(transform.position);
-                    aimAngle -= rotationSpeed * Time.deltaTime;
                     break;
                 }
             case State.Retreating:
@@ -112,7 +194,7 @@ public class EnemyMovement : MonoBehaviour
     {
         if (collision.gameObject.tag == "Trap")
         {
-            // TODO play sound cream
+            // TODO play sound scream
             state = State.Trapped;
             StartCoroutine(Retreat());
         }
@@ -145,11 +227,21 @@ public class EnemyMovement : MonoBehaviour
             if (Vector3.Angle(vectorToPlayer, GetVectorFromAngle(aimAngle)) < fov / 2f) {
                 RaycastHit2D raycastHit2D = Physics2D.Raycast(transform.position, vectorToPlayer, viewDistance);
 
-                if (raycastHit2D.collider.gameObject.tag == "Player")
+                
+                if (raycastHit2D.collider != null)
                 {
-                    
-                    return true;
+                    Debug.Log(raycastHit2D.collider.name);
+                    if (raycastHit2D.collider.CompareTag("Player"))
+                    {
+                        Debug.Log("see player");
+                        return true;
+
+
+
+                    }
                 }
+                
+                
                 
                    
             }
