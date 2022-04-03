@@ -16,43 +16,29 @@ public class Board<T>
     private int width;
     private int height;
 
-    private float cellSizeX;
-    private float cellSizeY;
+    private float cellSize;
 
     public GameObject cell;
 
-    //private Vector3 originPosition;
+    private Vector3 originPosition;
 
     private T[,] gridArray;
 
-    private Transform parentTransform;
-
     //public GameObject[,] cells;
 
-    public Board(Transform parentTransform, int width, int height, float cellSizeX, float cellSizeY, /*Vector3 originPosition,*/ Func<Board<T>, int, int, T> createGridObject)
+    public Board(Vector3 originPosition, int width, int height, float cellSize, Func<Board<T>, int, int, T> createGridObject)
     {
         this.width = width;
         this.height = height;
-        this.cellSizeX = cellSizeX;
-        this.cellSizeY = cellSizeY;
-        this.parentTransform = parentTransform;
+        this.cellSize = cellSize;
+        this.originPosition = originPosition;
 
         gridArray = new T[width, height];
 
         for (int x = 0; x < gridArray.GetLength(0); x++)
             for (int y = 0; y < gridArray.GetLength(1); y++)
             {
-                //GameObject newCell = Instantiate(Resources.Load("Prefabs/Cell") as GameObject, parentTransform);
-                ////cells[x, y] = newCell;
-
-                //Transform cellT = newCell.GetComponent<Transform>();
-
-                ////Spawn depending on parent position, place in array, and with half width and height offset because the pivot is in the center instead of bottom left, spawning them incorrectly
-                //cellT.position = new Vector3(parentTransform.position.x + (x * cellSizeX) + cellSizeX / 2, parentTransform.position.y + (y * cellSizeY) + cellSizeY / 2, 0);
-
-                //TextMeshPro textMesh = newCell.GetComponentInChildren<TextMeshPro>();
-                //textMesh.text = "[" + x + ", " + y + "]";
-
+                GridManager.instance.CreateCell(x, y, cellSize);
                 gridArray[x, y] = createGridObject(this, x, y);
             }
 
@@ -62,9 +48,30 @@ public class Board<T>
         };
     }
 
-    public void TriggerGridObjectChanged(int x, int y)
+    public int GetWidth()
     {
-        if (OnGridObjectChanged != null) OnGridObjectChanged(this, new OnGridObjectChangedEventArgs { x = x, y = y });
+        return width;
+    }
+
+    public int GetHeight()
+    {
+        return height;
+    }
+
+    public float GetCellSize()
+    {
+        return cellSize;
+    }
+
+    public Vector3 GetWorldPosition(int x, int y)
+    {
+        return new Vector3(x, y) * cellSize + originPosition;
+    }
+
+    public void GetXY(Vector3 worldPosition, out int x, out int y)
+    {
+        x = Mathf.FloorToInt((worldPosition - originPosition).x / cellSize);
+        y = Mathf.FloorToInt((worldPosition - originPosition).y / cellSize);
     }
 
     public void SetGridObject(int x, int y, T value)
@@ -76,6 +83,18 @@ public class Board<T>
         }
     }
 
+    public void TriggerGridObjectChanged(int x, int y)
+    {
+        if (OnGridObjectChanged != null) OnGridObjectChanged(this, new OnGridObjectChangedEventArgs { x = x, y = y });
+    }
+
+    public void SetGridObject(Vector3 worldPosition, T value)
+    {
+        int x, y;
+        GetXY(worldPosition, out x, out y);
+        SetGridObject(x, y, value);
+    }
+
     public T GetGridObject(int x, int y)
     {
         if (x >= 0 && y >= 0 && x < width && y < height)
@@ -84,28 +103,15 @@ public class Board<T>
         }
         else
         {
+            Debug.Log("X: " + x + " Y: " + y);
             return default(T);
         }
     }
 
-    //public Vector3 GetWorldPosition(int x, int y)
-    //{
-    //    return new Vector3(x, y) * cellSize + originPosition;
-    //}
-
-    //private void GetXY(Vector3 worldPosition, out int x, out int y)
-    //{
-    //    x = Mathf.FloorToInt((worldPosition - originPosition).x / cellSize);
-    //    y = Mathf.FloorToInt((worldPosition - originPosition).y / cellSize);
-    //}
-
-    public int GetWidth()
+    public T GetGridObject(Vector3 worldPosition)
     {
-        return width;
-    }
-
-    public int GetHeight()
-    {
-        return height;
+        int x, y;
+        GetXY(worldPosition, out x, out y);
+        return GetGridObject(x, y);
     }
 }

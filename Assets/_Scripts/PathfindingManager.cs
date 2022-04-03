@@ -4,18 +4,24 @@ using UnityEngine;
 
 public class PathfindingManager : MonoBehaviour
 {
+    [SerializeField] private EnemyMovement enemyMovement;
+
     private Pathfinding pathfinding;
+
+    private void Awake()
+    {
+        pathfinding = new Pathfinding(Vector3.zero, 30, 30, 1);
+    }
 
     private void Start()
     {
-        pathfinding = new Pathfinding(transform, 18, 10, 1, 1);
-
+        enemyMovement.SetTargetPosition(new Vector3(5.0f, 5.0f, 0.0f));
         MakePath(0, 0, 8, 3);
     }
 
     private void Update()
     {
-        //MakePath(0, 0, 5, 5);
+
     }
 
     public void MakePath(int startX, int startY, int endX, int endY)
@@ -26,12 +32,7 @@ public class PathfindingManager : MonoBehaviour
         if (path != null)
             foreach(PathNode node in path)
             {
-                Debug.Log(node.x + " " + node.y);
+                //Debug.Log(node.x + " " + node.y);
             }
-
-        //for (int i = 0; i < path.Count - 1; i++)
-        //{
-        //    Debug.DrawLine(new Vector3(path[i].x, path[i].y) * 10f + Vector3.one * 5f, new Vector3(path[i + 1].x, path[i + 1].y) * 10f + Vector3.one * 5f, Color.green, 5.0f, true);
-        //}
     }
 }

@@ -16,7 +16,10 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] float rotationSpeed = 10f;
 
     private GameObject player;
-    
+
+    //Pathfinding
+    private int currentPathIndex;
+    private List<Vector3> pathVectorList;
 
     // Start is called before the first frame update
     void Start()
@@ -40,6 +43,8 @@ public class EnemyMovement : MonoBehaviour
         UpdateViewCone();
 
         LocateTargetPlayer();
+
+        HandleMovement();
 
     }
 
@@ -73,6 +78,35 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
+    public void HandleMovement()
+    {
+        if (pathVectorList == null)
+        {
+            Debug.Log("pathVectorList null");
+            return;
+        }
+
+        Vector3 targetPosition = pathVectorList[currentPathIndex];
+
+        if (Vector3.Distance(transform.position, targetPosition) > 0.1f)
+        {
+            Vector3 moveDir = (targetPosition - transform.position).normalized;
+
+            float distanceBefore = Vector3.Distance(transform.position, targetPosition);
+
+            transform.position = transform.position + moveDir * MoveSpeed * Time.deltaTime;
+        }
+        else
+        {
+            currentPathIndex++;
+            
+            if (currentPathIndex >= pathVectorList.Count)
+            {
+                pathVectorList = null;
+            }
+        }
+    }
+
     private void FixedUpdate()
     {
         // TODO replace with actual movement pattern
@@ -83,5 +117,21 @@ public class EnemyMovement : MonoBehaviour
     {
         float angleRad = angleDeg * (Mathf.PI / 180f);
         return new Vector3(Mathf.Cos(angleRad), Mathf.Sin(angleRad));
+    }
+
+    public void SetTargetPosition(Vector3 targetPosition)
+    {
+        currentPathIndex = 0;
+
+        //THIS IS BECAUSE IF THE TRANSFORM IS NEGATIVE, IT DOES NOT WORK.
+        Debug.Log("YOOOOOOOOOOOOOOOOOOOO: " + transform.position);
+
+        pathVectorList = Pathfinding.Instance.FindPath(transform.position, targetPosition);
+
+        if (pathVectorList != null && pathVectorList.Count > 1)
+        {
+            Debug.Log("pathVectorList NOT null");
+            pathVectorList.RemoveAt(0);
+        }
     }
 }

@@ -25,6 +25,11 @@ public class PathNode
         isWalkable = true;
     }
 
+    public void SetWalkable(bool isWalkable)
+    {
+        this.isWalkable = isWalkable;
+    }
+
     public void CalculateFCost()
     {
         fCost = gCost + hCost;
