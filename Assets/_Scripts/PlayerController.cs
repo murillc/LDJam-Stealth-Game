@@ -55,6 +55,7 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.CompareTag("HideSpot"))
         {
+            Debug.Log("HIDESPOT ENTER");
             hidingTrigger = true;
             hidingSpot = collision.gameObject;
         }
@@ -76,7 +77,14 @@ public class PlayerController : MonoBehaviour
 
     public void OnInteract(InputValue value)
     {
-        if (value.isPressed&& hidingTrigger)
+        if (value.isPressed && state == State.Hiding)
+        {
+            transform.position = new Vector3(30f, 10f);
+            state = State.Roaming;
+            rb.bodyType = RigidbodyType2D.Dynamic;
+        }
+
+        if (value.isPressed && hidingTrigger)
         {
             if (state == State.Roaming)
             {
@@ -86,12 +94,5 @@ public class PlayerController : MonoBehaviour
             } 
             
         }
-
-        /*if (value.isPressed && state == State.Hiding)
-        {
-            transform.position = new Vector3(30f, 10f);
-            state = State.Roaming;
-            rb.bodyType = RigidbodyType2D.Dynamic;
-        }*/
     }
 }
