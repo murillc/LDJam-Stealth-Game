@@ -7,7 +7,7 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] LayerMask layerMask;
 
     [SerializeField] private float _moveSpeed;
-    
+
     public float MoveSpeed { get { return _moveSpeed; } set { _moveSpeed = MoveSpeed; } }
 
     [SerializeField] private Transform prefabFieldOfView;
@@ -67,7 +67,8 @@ public class EnemyMovement : MonoBehaviour
         if (player.GetComponent<PlayerController>().GetState() == PlayerController.State.Hiding)
         {
             playerHiding = true;
-        } else
+        }
+        else
         {
             playerHiding = false;
         }
@@ -75,13 +76,13 @@ public class EnemyMovement : MonoBehaviour
         switch (state)
         {
             case State.Roaming:
-            {
+                {
                     SetTargetPosition(_moveTarget);
                     if (LocateTargetPlayer()) { state = State.Chasing; }
                     break;
-            }
+                }
             case State.Chasing:
-            {
+                {
                     SetTargetPosition(player.transform.position);
                     aimAngle = GetAngleFromVector((player.transform.position - transform.position).normalized);
 
@@ -96,14 +97,16 @@ public class EnemyMovement : MonoBehaviour
                             if (playerHiding)
                             {
                                 seenPlayerNotHiding = false;
-                            } else
+                            }
+                            else
                             {
                                 seenPlayerNotHiding = true;
                                 Debug.Log("Seen player not hiding");
                             }
                         }
                         // continues to be in sight
-                        else if (inSight) {
+                        else if (inSight)
+                        {
                             if (playerHiding)
                             {
                                 if (seenPlayerNotHiding)
@@ -122,15 +125,16 @@ public class EnemyMovement : MonoBehaviour
                                 timer = 0;
                             }
                         }
-                        
-                        
-                    } else
+
+
+                    }
+                    else
                     {
                         if (timer > 0.5f)
                         {
                             Debug.Log("Lost sight...");
                             inSight = false;
-                        } 
+                        }
                         timer += Time.deltaTime;
                     }
 
@@ -139,7 +143,7 @@ public class EnemyMovement : MonoBehaviour
                         state = State.Roaming;
                     }
                     break;
-            }
+                }
             case State.Confused:
                 {
                     SetTargetPosition(transform.position);
@@ -182,12 +186,12 @@ public class EnemyMovement : MonoBehaviour
                 }
             default: break;
         }
-        
-        
+
+
         HandleMovement();
         // Must update view cone after handling movement
         UpdateViewCone();
-    
+
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -211,7 +215,7 @@ public class EnemyMovement : MonoBehaviour
     {
         fieldOfView.SetOrigin(transform.position);
         fieldOfView.SetAimDirectionFloat(aimAngle);
-        
+
     }
 
     private bool LocateTargetPlayer()
@@ -221,13 +225,14 @@ public class EnemyMovement : MonoBehaviour
         {
             // angle between enemy and player
             Vector3 vectorToPlayer = (player.transform.position - transform.position).normalized;
-            
+
 
             // player within fov
-            if (Vector3.Angle(vectorToPlayer, GetVectorFromAngle(aimAngle)) < fov / 2f) {
+            if (Vector3.Angle(vectorToPlayer, GetVectorFromAngle(aimAngle)) < fov / 2f)
+            {
                 RaycastHit2D raycastHit2D = Physics2D.Raycast(transform.position, vectorToPlayer, viewDistance);
 
-                
+
                 if (raycastHit2D.collider != null)
                 {
                     Debug.Log(raycastHit2D.collider.name);
@@ -240,10 +245,10 @@ public class EnemyMovement : MonoBehaviour
 
                     }
                 }
-                
-                
-                
-                   
+
+
+
+
             }
         }
 
@@ -272,12 +277,12 @@ public class EnemyMovement : MonoBehaviour
             {
                 aimAngle = GetAngleFromVector(moveDir);
             }
-            
+
         }
         else
         {
             currentPathIndex++;
-            
+
             if (currentPathIndex >= pathVectorList.Count)
             {
                 pathVectorList = null;
