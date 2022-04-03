@@ -10,7 +10,7 @@ public class PathfindingManager : MonoBehaviour
 
     private void Awake()
     {
-        pathfinding = new Pathfinding(-transform.position, 30, 30, 1);
+        pathfinding = new Pathfinding(transform.position, 40, 20, 1);
     }
 
     private void Start()

@@ -5,20 +5,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GridManager : Singleton<GridManager>
+public class GridDisplay : Singleton<GridDisplay>
 {
-    private Board<PathNode> grid;
-
-    public int width;
-    public int height;
-
-    public float cellSize;
-
-    void Start()
-    {
-        grid = new Board<PathNode>(Vector3.zero, width, height, cellSize, (Board<PathNode> g, int x, int y) => new PathNode(g, x, y));
-    }
-
     public void CreateCell(int x, int y, float cellSize)
     {
         GameObject newCell = Instantiate(Resources.Load("Prefabs/Cell") as GameObject, transform);

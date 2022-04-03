@@ -38,7 +38,7 @@ public class Board<T>
         for (int x = 0; x < gridArray.GetLength(0); x++)
             for (int y = 0; y < gridArray.GetLength(1); y++)
             {
-                GridManager.instance.CreateCell(x, y, cellSize);
+                GridDisplay.instance.CreateCell(x, y, cellSize);
                 gridArray[x, y] = createGridObject(this, x, y);
             }
 
@@ -70,8 +70,8 @@ public class Board<T>
 
     public void GetXY(Vector3 worldPosition, out int x, out int y)
     {
-        x = Mathf.FloorToInt((worldPosition - originPosition).x / cellSize);
-        y = Mathf.FloorToInt((worldPosition - originPosition).y / cellSize);
+        x = Mathf.FloorToInt((worldPosition + originPosition).x / cellSize);
+        y = Mathf.FloorToInt((worldPosition + originPosition).y / cellSize);
     }
 
     public void SetGridObject(int x, int y, T value)
