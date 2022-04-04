@@ -1,32 +1,69 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
-public class DocumentAltering : Singleton<DocumentAltering>
+public class DocumentAltering : MonoBehaviour
 {
+    [SerializeField] private Image slider;
+
     [SerializeField] public bool altered = false;
-    [SerializeField] public bool finishedAltering;
+    [SerializeField] public bool isbeingAltered;
     [SerializeField] public bool inDocumentRange;
 
     [SerializeField] public float timeToAlter;
+    [SerializeField] public float currentAlterTime;
 
-    void Start()
+    private void Start()
     {
-        
+        currentAlterTime = 0;
     }
 
-    void Update()
+    private void Update()
     {
-        
+        if (isbeingAltered)
+        {
+            if (currentAlterTime < timeToAlter)
+                currentAlterTime += Time.deltaTime;
+
+            slider.fillAmount = currentAlterTime / timeToAlter;
+        }
     }
 
     public void AlterDocuments()
     {
-        StartCoroutine(IE_AlterDocuments());
+        isbeingAltered = true;
     }
 
-    IEnumerator IE_AlterDocuments()
+    public void StopAltering()
     {
-        yield return null;
+        isbeingAltered = false;
+        currentAlterTime = 0;
+        slider.fillAmount = currentAlterTime / timeToAlter;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Player")
+        {
+            inDocumentRange = true;
+        }
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.tag == "Player")
+        {
+            inDocumentRange = false;
+            StopAltering();
+        }
+    }
+
+    public void OnInteract(InputValue value)
+    {
+        if (value.isPressed && inDocumentRange)
+        {
+            AlterDocuments();
+        }
     }
 }

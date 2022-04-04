@@ -1,43 +1,65 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering.Universal;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    public Vector2Int mouseWorldPosInt;
-    [SerializeField] private Camera mainCam;
-
     public enum State
     {
         Roaming, Hiding
     }
 
     private State state = State.Roaming;
-
+    [SerializeField] private Camera mainCam;
     [SerializeField] private float baseSpeed = 3f;
+    [SerializeField] private float turnSpeed;
     [SerializeField] private FieldOfView fieldOfView;
+    [SerializeField] private Light2D playerLight;
 
     Vector2 InputVector;
 
-    private float speed;
-    private bool hidingTrigger;
+    private Vector3 previousPos;
+    private Vector3 moveDir;
+
     private Rigidbody2D rb;
     private GameObject hidingSpot;
+
+    private bool hidingTrigger;
+
     public bool seen = false;
+    public Vector2Int mouseWorldPosInt;
 
     void Start()
     {
+        previousPos = transform.position;
+        moveDir = Vector3.zero;
+
         rb = gameObject.GetComponent<Rigidbody2D>();
-        speed = baseSpeed;
+    }
+
+    private void Update()
+    {
+        //new Quaternion(0f, 0f, GetAngleFromVector(moveDir), 0f);
+        Quaternion toRotation = Quaternion.LookRotation(Vector3.forward, -moveDir);
+        playerLight.transform.rotation = Quaternion.RotateTowards(playerLight.transform.rotation, toRotation, turnSpeed * Time.deltaTime);
+        Debug.Log("moveDir: " + moveDir);
+        Debug.Log("GET ANGLE FROM VEC: " + GetAngleFromVector(moveDir));
     }
 
     void FixedUpdate()
     {
+        if (transform.position != previousPos)
+        {
+            moveDir = (transform.position - previousPos).normalized;
+            previousPos = transform.position;
+        }
+
         switch (state)
         {
             case State.Roaming:
-                Vector2 speedFactor = InputVector * Time.fixedDeltaTime * speed;
+                Vector2 speedFactor = InputVector * Time.fixedDeltaTime * baseSpeed;
                 rb.MovePosition(rb.position + speedFactor);
                 break;
 
@@ -51,17 +73,16 @@ public class PlayerController : MonoBehaviour
         fieldOfView.SetOrigin(transform.position);
     }
 
+    public State GetState()
+    {
+        return state;
+    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("HideSpot"))
         {
             hidingTrigger = true;
             hidingSpot = collision.gameObject;
-        }
-
-        if (collision.CompareTag("DocumentSearchZone"))
-        {
-            DocumentAltering.instance.inDocumentRange = true;
         }
     }
 
@@ -70,11 +91,6 @@ public class PlayerController : MonoBehaviour
         if (collision.CompareTag("HideSpot"))
         {
             hidingTrigger = false;
-        }
-
-        if (collision.CompareTag("DocumentSearchZone"))
-        {
-            DocumentAltering.instance.inDocumentRange = false;
         }
     }
 
@@ -102,16 +118,6 @@ public class PlayerController : MonoBehaviour
                 rb.bodyType = RigidbodyType2D.Static;
             }
         }
-
-        if (value.isPressed && DocumentAltering.instance.inDocumentRange)
-        {
-            Debug.Log("searching documents");
-        }
-    }
-
-    public State GetState()
-    {
-        return state;
     }
 
     public void OnMousePosition(InputValue value)
@@ -126,5 +132,25 @@ public class PlayerController : MonoBehaviour
         {
             TrapManager.instance.SpawnTrap(mouseWorldPosInt.x, mouseWorldPosInt.y);
         }
+    }
+
+    public void OnShowTrapGrid(InputValue value)
+    {
+        if (value.isPressed)
+        {
+            GridDisplay.instance.ToggleDisplay();
+        }
+    }
+
+    private float GetAngleFromVector(Vector3 vector)
+    {
+        vector = vector.normalized;
+
+        float n = Mathf.Atan2(vector.y, vector.x) * Mathf.Rad2Deg;
+
+        if (n < 0) 
+            n += 360;
+
+        return n;
     }
 }

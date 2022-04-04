@@ -5,7 +5,7 @@ using UnityEngine.Tilemaps;
 
 public class PathfindingManager : MonoBehaviour
 {
-    public Tilemap unWalkableTilemap;
+    public List<Tilemap> unWalkableTilemaps;
 
     private Pathfinding pathfinding;
 
@@ -21,25 +21,26 @@ public class PathfindingManager : MonoBehaviour
 
     private void SetUnWalkableTiles()
     {
-        for (int i = unWalkableTilemap.cellBounds.xMin; i < unWalkableTilemap.cellBounds.xMax; i++)
+        foreach (var tilemap in unWalkableTilemaps)
         {
-            if (i > pathfinding.GetGrid().nodeArray.GetLength(0))
-                break;
+            for (int i = tilemap.cellBounds.xMin; i < tilemap.cellBounds.xMax; i++)
+                for (int j = tilemap.cellBounds.yMin; j < tilemap.cellBounds.yMax; j++)
+                    MakeTileUnWalkable(tilemap, i, j);
+        }
+    }
 
-            for (int j = unWalkableTilemap.cellBounds.yMin; j < unWalkableTilemap.cellBounds.yMax; j++)
-            {
-                if (j > pathfinding.GetGrid().nodeArray.GetLength(1))
-                    break;
+    private void MakeTileUnWalkable(Tilemap tilemap, int i, int j)
+    {
+        if (i > pathfinding.GetGrid().nodeArray.GetLength(0) || j > pathfinding.GetGrid().nodeArray.GetLength(1))
+            return;
 
-                Vector3Int localPos = new Vector3Int(i, j, (int)unWalkableTilemap.transform.position.z);
-                Vector3 worldPos = unWalkableTilemap.CellToWorld(localPos);
+        Vector3Int localPos = new Vector3Int(i, j, (int)tilemap.transform.position.z);
+        Vector3 worldPos = tilemap.CellToWorld(localPos);
 
-                if (unWalkableTilemap.GetSprite(localPos) != null)
-                {
-                    GridDisplay.instance.SetUnWalkableColor((int)worldPos.x, (int)worldPos.y);
-                    pathfinding.GetGrid().nodeArray[(int)worldPos.x, (int)worldPos.y].SetWalkable(false);
-                } 
-            }
+        if (tilemap.GetSprite(localPos) != null)
+        {
+            GridDisplay.instance.SetUnWalkableColor((int)worldPos.x, (int)worldPos.y);
+            pathfinding.GetGrid().nodeArray[(int)worldPos.x, (int)worldPos.y].SetWalkable(false);
         }
     }
 }

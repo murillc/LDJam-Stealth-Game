@@ -9,16 +9,16 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private LayerMask layerMask;
 
     [SerializeField] private float _moveSpeed;
-    [SerializeField] private float viewDistance = 8f;
-    [SerializeField] private float fov = 40f;
-    [SerializeField] private float aimAngle = 0f;
-    [SerializeField] private float rotationSpeed = 10f;
+    [SerializeField] private float viewDistance;
+    [SerializeField] private float fov;
+    [SerializeField] private float aimAngle;
+    [SerializeField] private float rotationSpeed;
+
+    [SerializeField] private float trapTime;
+    [SerializeField] private float detectionTime;
 
     private GameObject player;
     private FieldOfView fieldOfView;
-
-    private const float trapTime = 5f;
-    private const float detectionTime = 10f;
     private float timer = 0f;
 
     // Player hiding variables
@@ -216,7 +216,6 @@ public class EnemyMovement : MonoBehaviour
     {
         fieldOfView.SetOrigin(transform.position);
         fieldOfView.SetAimDirectionFloat(aimAngle);
-
     }
 
     private bool LocateTargetPlayer()
@@ -227,12 +226,10 @@ public class EnemyMovement : MonoBehaviour
             // angle between enemy and player
             Vector3 vectorToPlayer = (player.transform.position - transform.position).normalized;
 
-
             // player within fov
             if (Vector3.Angle(vectorToPlayer, GetVectorFromAngle(aimAngle)) < fov / 2f)
             {
                 RaycastHit2D raycastHit2D = Physics2D.Raycast(transform.position, vectorToPlayer, viewDistance);
-
 
                 if (raycastHit2D.collider != null)
                 {
@@ -241,18 +238,10 @@ public class EnemyMovement : MonoBehaviour
                     {
                         Debug.Log("see player");
                         return true;
-
-
-
                     }
                 }
-
-
-
-
             }
         }
-
         return false;
     }
 
@@ -260,7 +249,7 @@ public class EnemyMovement : MonoBehaviour
     {
         if (pathVectorList == null)
         {
-            Debug.Log("pathVectorList null");
+            //Debug.Log("pathVectorList null");
             return;
         }
 

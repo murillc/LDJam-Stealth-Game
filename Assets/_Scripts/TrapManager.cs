@@ -24,6 +24,10 @@ public class TrapManager : Singleton<TrapManager>
         if (Pathfinding.Instance.GetGrid().nodeArray[posX, posY].GetHasTrap())
             return;
 
+        //don't allow to be placed on a unwalkable zone
+        if (!Pathfinding.Instance.GetGrid().nodeArray[posX, posY].GetWalkable())
+            return;
+
         //if the grid node is in range of the player you can spawn a trap on it
         if (Pathfinding.Instance.GetGrid().nodeArray[posX, posY].GetInPlayerRange())
         {
