@@ -139,7 +139,7 @@ public class PlayerController : Singleton<PlayerController>
     {
         if (value.isPressed)
         {
-            GridDisplay.instance.ToggleGridDisplay();
+            GridDisplay.instance.ToggleDisplay();
         }
     }
 

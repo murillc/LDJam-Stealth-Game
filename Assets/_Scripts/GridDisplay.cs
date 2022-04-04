@@ -20,24 +20,24 @@ public class GridDisplay : Singleton<GridDisplay>
         if (display == false)
             return;
 
-        ////do once every 120 frames
-        //if (Utility.RateLimiter(60))
-        //{
-        //    for (int i = 0; i < allCells.GetLength(0); i++)
-        //        for (int j = 0; j < allCells.GetLength(1); j++)
-        //        {
-        //            if (Vector3.Distance(player.transform.position, allCells[i, j].transform.position) < 3.0f)
-        //            {
-        //                Pathfinding.Instance.GetGrid().nodeArray[i, j].SetInPlayerRange(true);
-        //                allCells[i, j].SetActive(true);
-        //            }
-        //            else
-        //            {
-        //                Pathfinding.Instance.GetGrid().nodeArray[i, j].SetInPlayerRange(false);
-        //                allCells[i, j].SetActive(false);
-        //            }
-        //        }
-        //}
+        //do once every 120 frames
+        if (Utility.RateLimiter(60))
+        {
+            for (int i = 0; i < allCells.GetLength(0); i++)
+                for (int j = 0; j < allCells.GetLength(1); j++)
+                {
+                    if (Vector3.Distance(player.transform.position, allCells[i, j].transform.position) < 3.0f)
+                    {
+                        Pathfinding.Instance.GetGrid().nodeArray[i, j].SetInPlayerRange(true);
+                        allCells[i, j].SetActive(true);
+                    }
+                    else
+                    {
+                        Pathfinding.Instance.GetGrid().nodeArray[i, j].SetInPlayerRange(false);
+                        allCells[i, j].SetActive(false);
+                    }
+                }
+        }
     }
 
     public void ToggleGridDisplay()

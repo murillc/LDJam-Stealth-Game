@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DayNightCycle : MonoBehaviour
 {
@@ -12,6 +14,11 @@ public class DayNightCycle : MonoBehaviour
 
     public CycleEnum currentCycle;
     private CycleEnum oldCycle;
+
+    [SerializeField] private Slider currentCycleTimeSlider;
+
+    [SerializeField] private float timeToSwapCycles;
+    [SerializeField] private float currentCycleTime;
 
     public GameObject dayObjects;
     public GameObject nightObjects;
@@ -25,24 +32,38 @@ public class DayNightCycle : MonoBehaviour
 
     void Start()
     {
-
+        currentCycleTime = timeToSwapCycles;
     }
 
     void Update()
     {
+        if (currentCycleTime > 0)
+        {
+            currentCycleTime -= Time.deltaTime;
+        }
+        else
+        {
+            SwitchCycle();
+            currentCycleTime = timeToSwapCycles;
+        }
+
+        currentCycleTimeSlider.value = currentCycleTime;
+
         if (currentCycle != oldCycle)
         {
             switch (currentCycle)
             {
                 case CycleEnum.DAY:
-                    nightObjects.SetActive(false);
                     playerLight.SetActive(false);
+
+                    nightObjects.SetActive(false);
                     dayObjects.SetActive(true);
                     break;
 
                 case CycleEnum.NIGHT:
-                    nightObjects.SetActive(true);
                     playerLight.SetActive(true);
+
+                    nightObjects.SetActive(true);
                     dayObjects.SetActive(false);
                     break;
 
@@ -53,5 +74,13 @@ public class DayNightCycle : MonoBehaviour
 
             oldCycle = currentCycle;
         }
+    }
+
+    private void SwitchCycle()
+    {
+        if (currentCycle == CycleEnum.DAY)
+            currentCycle = CycleEnum.NIGHT;
+        else
+            currentCycle = CycleEnum.DAY;
     }
 }
