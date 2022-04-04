@@ -56,6 +56,9 @@ TagManager:
   - name: House Furniture
     uniqueID: 3036578791
     locked: 0
+  - name: FurnatureTop
+    uniqueID: 3164694181
+    locked: 0
   - name: Bombs
     uniqueID: 109237787
     locked: 0
