@@ -58,6 +58,11 @@ public class PlayerController : MonoBehaviour
             hidingTrigger = true;
             hidingSpot = collision.gameObject;
         }
+
+        if (collision.CompareTag("DocumentSearchZone"))
+        {
+            DocumentAltering.instance.inDocumentRange = true;
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -65,6 +70,11 @@ public class PlayerController : MonoBehaviour
         if (collision.CompareTag("HideSpot"))
         {
             hidingTrigger = false;
+        }
+
+        if (collision.CompareTag("DocumentSearchZone"))
+        {
+            DocumentAltering.instance.inDocumentRange = false;
         }
     }
 
@@ -91,6 +101,11 @@ public class PlayerController : MonoBehaviour
                 transform.position = hidingSpot.transform.position;
                 rb.bodyType = RigidbodyType2D.Static;
             }
+        }
+
+        if (value.isPressed && DocumentAltering.instance.inDocumentRange)
+        {
+            Debug.Log("searching documents");
         }
     }
 
