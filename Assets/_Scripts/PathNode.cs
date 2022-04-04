@@ -14,6 +14,7 @@ public class PathNode
 
     private bool walkable;
     private bool inPlayerRange;
+    private bool hasTrap;
 
     public PathNode previousNode;
 
@@ -44,6 +45,16 @@ public class PathNode
     public bool GetInPlayerRange()
     {
         return inPlayerRange;
+    }
+
+    public void SetHasTrap(bool hasTrap)
+    {
+        this.hasTrap = hasTrap;
+    }
+
+    public bool GetHasTrap()
+    {
+        return hasTrap;
     }
 
     public void CalculateFCost()
