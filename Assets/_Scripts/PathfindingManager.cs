@@ -11,7 +11,7 @@ public class PathfindingManager : MonoBehaviour
 
     private void Awake()
     {
-        pathfinding = new Pathfinding(transform.position, 50, 30, 1);
+        pathfinding = new Pathfinding(transform.position, 41, 23, 1);
     }
 
     private void Start()
@@ -41,6 +41,7 @@ public class PathfindingManager : MonoBehaviour
         {
             GridDisplay.instance.SetUnWalkableColor((int)worldPos.x, (int)worldPos.y);
             pathfinding.GetGrid().nodeArray[(int)worldPos.x, (int)worldPos.y].SetWalkable(false);
+            pathfinding.GetGrid().walkableNodes.Remove(pathfinding.GetGrid().nodeArray[(int)worldPos.x, (int)worldPos.y]);
         }
     }
 }

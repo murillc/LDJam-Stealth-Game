@@ -11,6 +11,8 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private LayerMask layerMask;
 
     [SerializeField] private float _moveSpeed;
+    [SerializeField] private float _baseSpeed;
+    [SerializeField] private float _chaseSpeed;
     [SerializeField] private float viewDistance;
     [SerializeField] private float fov;
     [SerializeField] private float aimAngle;
@@ -19,14 +21,16 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private float trapTime;
     [SerializeField] private float detectionTime;
 
+    [SerializeField] private bool reachedDestination = false;
+
     private GameObject player;
     private FieldOfView fieldOfView;
     private float timer = 0f;
 
     // Player hiding variables
     private bool playerHiding = false;
-    private bool seenPlayerNotHiding = false;
-    private bool inSight = false;
+    [SerializeField] private bool seenPlayerNotHiding = false;
+    [SerializeField] private bool inSight = false;
 
     public Vector3 spawnPoint;
 
@@ -48,10 +52,12 @@ public class EnemyMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        _moveSpeed = _baseSpeed;
+
         transform.position = spawnPoint;
 
         player = GameObject.FindGameObjectWithTag("Player");
-        fieldOfView = Instantiate(prefabFieldOfView, transform).GetComponent<FieldOfView>();
+        fieldOfView = Instantiate(prefabFieldOfView).GetComponent<FieldOfView>();
 
         fieldOfView.SetFOV(fov);
         fieldOfView.SetAimDirectionFloat(aimAngle);
@@ -80,12 +86,25 @@ public class EnemyMovement : MonoBehaviour
         {
             case State.Roaming:
                 {
+                    _moveSpeed = _baseSpeed;
+
+                    exclamationMark.SetActive(false);
+
                     SetTargetPosition(_moveTarget);
+
+                    if (reachedDestination)
+                    {
+                        _moveTarget = Pathfinding.Instance.GetRandomWalkableNode().GetPosition();
+                        reachedDestination = false;
+                    }
+
                     if (LocateTargetPlayer()) { state = State.Chasing; }
                     break;
                 }
             case State.Chasing:
                 {
+                    _moveSpeed = _chaseSpeed;
+
                     exclamationMark.SetActive(true);
 
                     Vector3 lastKnownPlayerPos = player.GetComponent<PlayerController>().lastKnownPos;
@@ -147,14 +166,16 @@ public class EnemyMovement : MonoBehaviour
                     if (timer > detectionTime)
                     {
                         state = State.Roaming;
-                        exclamationMark.SetActive(false);
                     }
                     break;
                 }
             case State.Confused:
                 {
-                    SetTargetPosition(transform.position);
+                    _moveSpeed = _baseSpeed;
 
+                    exclamationMark.SetActive(false);
+
+                    SetTargetPosition(transform.position);
 
                     aimAngle -= rotationSpeed * Time.deltaTime;
 
@@ -180,14 +201,18 @@ public class EnemyMovement : MonoBehaviour
                 }
             case State.Trapped:
                 {
+                    _moveSpeed = _baseSpeed;
+
                     // Stay still
                     SetTargetPosition(transform.position);
                     break;
                 }
             case State.Retreating:
                 {
+                    _moveSpeed = _baseSpeed;
+
                     // TODO make him retreat to an entry / exit point
-                    SetTargetPosition(new Vector3(31f, 4f));
+                    SetTargetPosition(spawnPoint);
                     if (LocateTargetPlayer()) { state = State.Chasing; }
                     break;
                 }
@@ -282,6 +307,7 @@ public class EnemyMovement : MonoBehaviour
             if (currentPathIndex >= pathVectorList.Count)
             {
                 pathVectorList = null;
+                reachedDestination = true;
             }
         }
     }

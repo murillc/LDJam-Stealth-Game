@@ -262,14 +262,20 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 64
-  _moveSpeed: 2.5
+  _moveSpeed: 1.5
+  _baseSpeed: 1.5
+  _chaseSpeed: 2
   viewDistance: 8
-  fov: 40
+  fov: 90
   aimAngle: -30
   rotationSpeed: 90
   trapTime: 2.5
-  detectionTime: 6
-  spawnPoint: {x: 0, y: 0, z: 0}
+  detectionTime: 7
+  reachedDestination: 0
+  seenPlayerNotHiding: 0
+  inSight: 0
+  spawnPoint: {x: 18, y: 5, z: 0}
+  state: 0
   _moveTarget: {x: 17, y: 16, z: 0}
 --- !u!212 &6922353123809595456
 SpriteRenderer:
@@ -309,7 +315,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 2118546067
-  m_SortingLayer: 9
+  m_SortingLayer: 10
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
   m_Color: {r: 1, g: 0, b: 0, a: 1}

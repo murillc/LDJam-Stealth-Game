@@ -21,6 +21,7 @@ public class Board
     private Vector3 originPosition;
 
     public PathNode[,] nodeArray;
+    public List<PathNode> walkableNodes;
 
     public Board(Vector3 originPosition, int width, int height, float cellSize)
     {
@@ -30,11 +31,13 @@ public class Board
         this.originPosition = originPosition;
 
         nodeArray = new PathNode[width, height];
+        walkableNodes = new List<PathNode>();
 
         for (int x = 0; x < nodeArray.GetLength(0); x++)
             for (int y = 0; y < nodeArray.GetLength(1); y++)
             {
                 nodeArray[x, y] = new PathNode(this, x, y);
+                walkableNodes.Add(nodeArray[x, y]);
 
                 GridDisplay.instance.CreateCell(x, y, cellSize, nodeArray[x, y].GetWalkable());
             }

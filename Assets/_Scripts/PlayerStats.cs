@@ -16,7 +16,5 @@ public class PlayerStats : Singleton<PlayerStats>
 
     void Start()
     {
-        money = 0;
-        heat = 0;
     }
 }

@@ -199,6 +199,18 @@ public class Pathfinding
         return cheapestFCostPathNode;
     }
 
+    public PathNode GetRandomWalkableNode()
+    {
+        int rand = Random.Range(0, GetGrid().walkableNodes.Count);
+
+        return GetGrid().walkableNodes[rand];
+    }
+
+    public void GetRandomNearbyNode(int x, int y)
+    {
+
+    }
+
     public int GetWidth()
     {
         return width;

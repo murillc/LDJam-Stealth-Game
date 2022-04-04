@@ -62,6 +62,11 @@ public class PathNode
         fCost = gCost + hCost;
     }
 
+    public Vector3 GetPosition()
+    {
+        return new Vector3(x, y, 0);
+    }
+
     public override string ToString()
     {
         return x + "," + y;
