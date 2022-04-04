@@ -96141,6 +96141,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentCycle: 0
+  dayObjects: {fileID: 296868657}
+  nightObjects: {fileID: 1146588109}
+  playerLight: {fileID: 1607220200}
 --- !u!4 &1149978719
 Transform:
   m_ObjectHideFlags: 0
@@ -96539,6 +96542,11 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1607220200 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1196116355, guid: 1756dd008ac03674094a0368f7578e38, type: 3}
+  m_PrefabInstance: {fileID: 5589528231645744407}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1626171002
 GameObject:
   m_ObjectHideFlags: 0
