@@ -62,9 +62,9 @@ TagManager:
   - name: Bombs
     uniqueID: 109237787
     locked: 0
-  - name: Entities
-    uniqueID: 2118546067
-    locked: 0
   - name: Tabletop
     uniqueID: 2938989695
+    locked: 0
+  - name: Entities
+    uniqueID: 2118546067
     locked: 0
