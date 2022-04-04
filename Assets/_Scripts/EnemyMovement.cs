@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering.Universal;
 
 public class EnemyMovement : MonoBehaviour
 {
@@ -22,6 +23,10 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private float detectionTime;
 
     [SerializeField] private bool reachedDestination = false;
+
+    [SerializeField] private Light2D enemyLight;
+    [SerializeField] private float turnSpeed;
+
 
     private GameObject player;
     private FieldOfView fieldOfView;
@@ -224,6 +229,8 @@ public class EnemyMovement : MonoBehaviour
         // Must update view cone after handling movement
         UpdateViewCone();
 
+        
+
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -299,6 +306,9 @@ public class EnemyMovement : MonoBehaviour
                 aimAngle = GetAngleFromVector(moveDir);
             }
 
+            Quaternion toRotation = Quaternion.LookRotation(Vector3.forward, moveDir);
+            enemyLight.transform.rotation = Quaternion.RotateTowards(enemyLight.transform.rotation, toRotation, turnSpeed * Time.deltaTime);
+
         }
         else
         {
@@ -310,6 +320,8 @@ public class EnemyMovement : MonoBehaviour
                 reachedDestination = true;
             }
         }
+
+       
     }
 
     private void FixedUpdate()
