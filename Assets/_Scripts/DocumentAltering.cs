@@ -31,7 +31,7 @@ public class DocumentAltering : MonoBehaviour
 
             if (currentAlterTime >= timeToAlter)
             {
-                PlayerStats.instance.money += 500;
+                PlayerStats.instance.heat -= PlayerStats.instance.heatPenalty;
                 StopAltering();
                 altered = true;
             }

@@ -7,6 +7,7 @@ public class PlayerStats : Singleton<PlayerStats>
 {
     public int money;
     public float heat;
+    public float heatPenalty;
 
     protected override void Awake()
     {
