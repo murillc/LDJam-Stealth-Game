@@ -5,36 +5,33 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    Vector2 InputVector;
-    [SerializeField] float baseSpeed = 3f;
-    float speed;
-    [SerializeField] private FieldOfView fieldOfView;
-    private Rigidbody2D rb;
-
-    private bool hidingTrigger;
-    private GameObject hidingSpot;
+    public Vector2Int mouseWorldPosInt;
+    [SerializeField] private Camera mainCam;
 
     public enum State
     {
         Roaming, Hiding
     }
-    State state = State.Roaming;
+
+    private State state = State.Roaming;
+
+    [SerializeField] private float baseSpeed = 3f;
+    [SerializeField] private FieldOfView fieldOfView;
+
+    Vector2 InputVector;
+
+    private float speed;
+    private bool hidingTrigger;
+    private Rigidbody2D rb;
+    private GameObject hidingSpot;
     public bool seen = false;
 
-    // Start is called before the first frame update
     void Start()
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
         speed = baseSpeed;
     }
 
-
-    private void Update()
-    {
-
-    }
-
-    // Update is called once per frame
     void FixedUpdate()
     {
         switch (state)
@@ -43,8 +40,10 @@ public class PlayerController : MonoBehaviour
                 Vector2 speedFactor = InputVector * Time.fixedDeltaTime * speed;
                 rb.MovePosition(rb.position + speedFactor);
                 break;
+
             case State.Hiding:
                 break;
+
             default:
                 break;
         }
@@ -69,7 +68,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
     public void OnMovement(InputValue value)
     {
         InputVector = value.Get<Vector2>();
@@ -93,14 +91,25 @@ public class PlayerController : MonoBehaviour
                 transform.position = hidingSpot.transform.position;
                 rb.bodyType = RigidbodyType2D.Static;
             }
-
         }
-
-
     }
 
     public State GetState()
     {
         return state;
+    }
+
+    public void OnMousePosition(InputValue value)
+    {
+        Vector2 pos = mainCam.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+        mouseWorldPosInt = new Vector2Int((int)pos.x, (int)pos.y);
+    }
+
+    public void OnMouseClick(InputValue value)
+    {
+        if (value.isPressed)
+        {
+            
+        }
     }
 }

@@ -4,32 +4,31 @@ using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
 {
-    [SerializeField] LayerMask layerMask;
+    [SerializeField] private Transform prefabFieldOfView;
+
+    [SerializeField] private LayerMask layerMask;
 
     [SerializeField] private float _moveSpeed;
-
-    public float MoveSpeed { get { return _moveSpeed; } set { _moveSpeed = MoveSpeed; } }
-
-    [SerializeField] private Transform prefabFieldOfView;
-    private FieldOfView fieldOfView;
     [SerializeField] private float viewDistance = 8f;
     [SerializeField] private float fov = 40f;
-
     [SerializeField] private float aimAngle = 0f;
-    [SerializeField] float rotationSpeed = 10f;
-
-    private const float detectionTime = 10f;
-    private float timer = 0f;
-
-    private const float trapTime = 5f;
+    [SerializeField] private float rotationSpeed = 10f;
 
     private GameObject player;
+    private FieldOfView fieldOfView;
+
+    private const float trapTime = 5f;
+    private const float detectionTime = 10f;
+    private float timer = 0f;
 
     // Player hiding variables
     private bool playerHiding = false;
     private bool seenPlayerNotHiding = false;
-
     private bool inSight = false;
+
+    public Vector3 spawnPoint;
+
+    public float MoveSpeed { get { return _moveSpeed; } set { _moveSpeed = MoveSpeed; } }
 
     public enum State
     {
@@ -47,6 +46,8 @@ public class EnemyMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        transform.position = spawnPoint;
+
         player = GameObject.FindGameObjectWithTag("Player");
         fieldOfView = Instantiate(prefabFieldOfView).GetComponent<FieldOfView>();
 

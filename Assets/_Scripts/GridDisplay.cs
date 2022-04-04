@@ -34,27 +34,27 @@ public class GridDisplay : Singleton<GridDisplay>
         }
     }
 
-    public void ToggleGridDisplay()
-    {
-        //if (display == true)
-        //{
-        //    for (int i = 0; i < allCells.GetLength(0); i++)
-        //        for (int j = 0; j < allCells.GetLength(1); j++)
-        //        {
-        //            allCells[i, j].SetActive(false);
-        //            display = false;
-        //        }
-        //}
-        //else if (display == false)
-        //{
-        //    for (int i = 0; i < allCells.GetLength(0); i++)
-        //        for (int j = 0; j < allCells.GetLength(1); j++)
-        //        {
-        //            allCells[i, j].SetActive(true);
-        //            display = true;
-        //        }
-        //}
-    }
+    //public void ToggleGridDisplay()
+    //{
+    //    if (display == true)
+    //    {
+    //        for (int i = 0; i < allCells.GetLength(0); i++)
+    //            for (int j = 0; j < allCells.GetLength(1); j++)
+    //            {
+    //                allCells[i, j].SetActive(false);
+    //                display = false;
+    //            }
+    //    }
+    //    else if (display == false)
+    //    {
+    //        for (int i = 0; i < allCells.GetLength(0); i++)
+    //            for (int j = 0; j < allCells.GetLength(1); j++)
+    //            {
+    //                allCells[i, j].SetActive(true);
+    //                display = true;
+    //            }
+    //    }
+    //}
 
     public void SetDisplayGrid(bool display)
     {
@@ -100,7 +100,6 @@ public class GridDisplay : Singleton<GridDisplay>
 
     public void SetUnWalkableColor(int x, int y)
     {
-        Debug.Log("X: " + x + " Y: " + y);
         SpriteRenderer spriteRenderer = allCells[x, y].GetComponentInChildren<SpriteRenderer>();
         spriteRenderer.color = new Color(0.9607843f, 0.2313726f, 0.3411765f, 0.3490196f);
     }
