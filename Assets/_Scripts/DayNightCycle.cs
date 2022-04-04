@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class DayNightCycle : MonoBehaviour
 {
     public enum CycleEnum
@@ -20,6 +21,9 @@ public class DayNightCycle : MonoBehaviour
     [SerializeField] private float timeToSwapCycles;
     [SerializeField] private float currentCycleTime;
 
+    [SerializeField] private GameObject DocumentManager;
+    private DocumentManager documentManager;
+
     public GameObject dayObjects;
     public GameObject nightObjects;
     public GameObject playerLight;
@@ -33,6 +37,7 @@ public class DayNightCycle : MonoBehaviour
     void Start()
     {
         currentCycleTime = timeToSwapCycles;
+        documentManager = DocumentManager.GetComponent<DocumentManager>();
     }
 
     void Update()
@@ -65,6 +70,8 @@ public class DayNightCycle : MonoBehaviour
 
                     nightObjects.SetActive(true);
                     dayObjects.SetActive(false);
+
+                    documentManager.SpawnDocumentRandom();
                     break;
 
                 default:
