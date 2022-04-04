@@ -101,7 +101,7 @@ public class Pathfinding
             foreach (PathNode neighbourNode in GetNeighbours(currentNode))
             {
                 if (closedList.Contains(neighbourNode)) continue;
-                if (!neighbourNode.isWalkable)
+                if (!neighbourNode.GetWalkable())
                 {
                     closedList.Add(neighbourNode);
                     continue;

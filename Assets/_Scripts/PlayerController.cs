@@ -109,7 +109,7 @@ public class PlayerController : MonoBehaviour
     {
         if (value.isPressed)
         {
-            
+            TrapManager.instance.SpawnTrap(mouseWorldPosInt.x, mouseWorldPosInt.y);
         }
     }
 }

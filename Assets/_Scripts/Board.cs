@@ -36,7 +36,7 @@ public class Board
             {
                 nodeArray[x, y] = new PathNode(this, x, y);
 
-                GridDisplay.instance.CreateCell(x, y, cellSize, nodeArray[x, y].isWalkable);
+                GridDisplay.instance.CreateCell(x, y, cellSize, nodeArray[x, y].GetWalkable());
             }
 
         OnGridObjectChanged += (object sender, OnGridObjectChangedEventArgs eventArgs) => 

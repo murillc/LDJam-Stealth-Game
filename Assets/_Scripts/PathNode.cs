@@ -12,7 +12,8 @@ public class PathNode
     public int hCost;
     public int fCost;
 
-    public bool isWalkable;
+    private bool walkable;
+    private bool inPlayerRange;
 
     public PathNode previousNode;
 
@@ -22,17 +23,27 @@ public class PathNode
         this.x = x;
         this.y = y;
 
-        isWalkable = true;
+        walkable = true;
     }
 
     public void SetWalkable(bool isWalkable)
     {
-        this.isWalkable = isWalkable;
+        this.walkable = isWalkable;
     }
 
     public bool GetWalkable()
     {
-        return isWalkable;
+        return walkable;
+    }
+
+    public void SetInPlayerRange(bool inPlayerRange)
+    {
+        this.inPlayerRange = inPlayerRange;
+    }
+
+    public bool GetInPlayerRange()
+    {
+        return inPlayerRange;
     }
 
     public void CalculateFCost()

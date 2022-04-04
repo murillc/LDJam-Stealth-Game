@@ -96003,6 +96003,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1777166990}
+  - component: {fileID: 1777166991}
   m_Layer: 0
   m_Name: TrapManager
   m_TagString: Untagged
@@ -96018,12 +96019,25 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1777166989}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 18.246996, y: 12.70107, z: -71.78992}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1777166991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1777166989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6360f25fe530bfe49b06d4dcf3d21268, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trapPrefab: {fileID: 8289190124681841477, guid: 639deb66a1847d646902dd1dcc6d726b, type: 3}
 --- !u!1 &1825304259
 GameObject:
   m_ObjectHideFlags: 0
