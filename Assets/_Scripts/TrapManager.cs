@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class TrapManager : Singleton<TrapManager>
 {
+    public int trapCost;
     public GameObject trapPrefab;
 
     public void SpawnTrap(int posX, int posY)
@@ -28,12 +29,20 @@ public class TrapManager : Singleton<TrapManager>
         if (!Pathfinding.Instance.GetGrid().nodeArray[posX, posY].GetWalkable())
             return;
 
+        if (PlayerStats.instance.money < trapCost)
+        {
+            Debug.Log("NO MONEY FOR TRAP");
+            return;
+        }
+
         //if the grid node is in range of the player you can spawn a trap on it
         if (Pathfinding.Instance.GetGrid().nodeArray[posX, posY].GetInPlayerRange())
         {
+
             Pathfinding.Instance.GetGrid().nodeArray[posX, posY].SetHasTrap(true);
             GameObject trap = Instantiate(trapPrefab, transform);
             trap.transform.position = new Vector3(posX + 0.5f, posY + 0.5f, 0);
+            PlayerStats.instance.money -= trapCost;
             Debug.Log("x: " + posX + " y: " + posY);
         }
     }

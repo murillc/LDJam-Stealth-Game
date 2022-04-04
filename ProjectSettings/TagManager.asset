@@ -51,6 +51,9 @@ TagManager:
   - name: House
     uniqueID: 4167135329
     locked: 0
+  - name: WalkableButUnderEntities
+    uniqueID: 2456314325
+    locked: 0
   - name: Player
     uniqueID: 1239679615
     locked: 0

@@ -50,8 +50,8 @@ MonoBehaviour:
   altered: 0
   isbeingAltered: 0
   inDocumentRange: 0
-  timeToAlter: 10
-  currentAlterTime: 10
+  timeToAlter: 3
+  currentAlterTime: 3
 --- !u!61 &913015603270110688
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -198,7 +198,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &913015603715073665
 RectTransform:
   m_ObjectHideFlags: 0

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
 using UnityEngine.InputSystem;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : Singleton<PlayerController>
 {
     public enum State
     {
@@ -31,6 +31,8 @@ public class PlayerController : MonoBehaviour
     public bool seen = false;
     public Vector2Int mouseWorldPosInt;
 
+    public Vector3 lastKnownPos;
+
     void Start()
     {
         previousPos = transform.position;
@@ -44,8 +46,6 @@ public class PlayerController : MonoBehaviour
         //new Quaternion(0f, 0f, GetAngleFromVector(moveDir), 0f);
         Quaternion toRotation = Quaternion.LookRotation(Vector3.forward, -moveDir);
         playerLight.transform.rotation = Quaternion.RotateTowards(playerLight.transform.rotation, toRotation, turnSpeed * Time.deltaTime);
-        Debug.Log("moveDir: " + moveDir);
-        Debug.Log("GET ANGLE FROM VEC: " + GetAngleFromVector(moveDir));
     }
 
     void FixedUpdate()
@@ -59,6 +59,7 @@ public class PlayerController : MonoBehaviour
         switch (state)
         {
             case State.Roaming:
+                lastKnownPos = transform.position;
                 Vector2 speedFactor = InputVector * Time.fixedDeltaTime * baseSpeed;
                 rb.MovePosition(rb.position + speedFactor);
                 break;

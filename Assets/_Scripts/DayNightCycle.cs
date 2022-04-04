@@ -19,7 +19,7 @@ public class DayNightCycle : MonoBehaviour
 
     private void Awake()
     {
-        currentCycle = CycleEnum.NIGHT;
+        //currentCycle = CycleEnum.NIGHT;
         oldCycle = currentCycle;
     }
 

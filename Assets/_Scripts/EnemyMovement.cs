@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
 {
+    [SerializeField] private GameObject exclamationMark;
+
     [SerializeField] private Transform prefabFieldOfView;
 
     [SerializeField] private LayerMask layerMask;
@@ -34,7 +36,7 @@ public class EnemyMovement : MonoBehaviour
     {
         Roaming, Chasing, Confused, Retreating, Trapped
     }
-    private State state = State.Roaming;
+    [SerializeField] private State state = State.Roaming;
 
     [SerializeField] private Vector3 _moveTarget;
     public Vector3 MoveTarget { get { return _moveTarget; } set { _moveTarget = MoveTarget; } }
@@ -49,7 +51,7 @@ public class EnemyMovement : MonoBehaviour
         transform.position = spawnPoint;
 
         player = GameObject.FindGameObjectWithTag("Player");
-        fieldOfView = Instantiate(prefabFieldOfView).GetComponent<FieldOfView>();
+        fieldOfView = Instantiate(prefabFieldOfView, transform).GetComponent<FieldOfView>();
 
         fieldOfView.SetFOV(fov);
         fieldOfView.SetAimDirectionFloat(aimAngle);
@@ -84,8 +86,11 @@ public class EnemyMovement : MonoBehaviour
                 }
             case State.Chasing:
                 {
-                    SetTargetPosition(player.transform.position);
-                    aimAngle = GetAngleFromVector((player.transform.position - transform.position).normalized);
+                    exclamationMark.SetActive(true);
+
+                    Vector3 lastKnownPlayerPos = player.GetComponent<PlayerController>().lastKnownPos;
+                    SetTargetPosition(lastKnownPlayerPos);
+                    aimAngle = GetAngleFromVector((lastKnownPlayerPos - transform.position).normalized);
 
                     if (LocateTargetPlayer())
                     {
@@ -102,7 +107,7 @@ public class EnemyMovement : MonoBehaviour
                             else
                             {
                                 seenPlayerNotHiding = true;
-                                Debug.Log("Seen player not hiding");
+                               // Debug.Log("Seen player not hiding");
                             }
                         }
                         // continues to be in sight
@@ -112,7 +117,7 @@ public class EnemyMovement : MonoBehaviour
                             {
                                 if (seenPlayerNotHiding)
                                 {
-                                    Debug.Log("Keep going!");
+                                    //Debug.Log("Keep going!");
                                     // TODO speed up
                                 }
                                 else
@@ -133,7 +138,7 @@ public class EnemyMovement : MonoBehaviour
                     {
                         if (timer > 0.5f)
                         {
-                            Debug.Log("Lost sight...");
+                            //Debug.Log("Lost sight...");
                             inSight = false;
                         }
                         timer += Time.deltaTime;
@@ -142,6 +147,7 @@ public class EnemyMovement : MonoBehaviour
                     if (timer > detectionTime)
                     {
                         state = State.Roaming;
+                        exclamationMark.SetActive(false);
                     }
                     break;
                 }
@@ -233,10 +239,10 @@ public class EnemyMovement : MonoBehaviour
 
                 if (raycastHit2D.collider != null)
                 {
-                    Debug.Log(raycastHit2D.collider.name);
+                    //Debug.Log(raycastHit2D.collider.name);
                     if (raycastHit2D.collider.CompareTag("Player"))
                     {
-                        Debug.Log("see player");
+                        //Debug.Log("see player");
                         return true;
                     }
                 }

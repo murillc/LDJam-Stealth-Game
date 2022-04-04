@@ -28,16 +28,31 @@ public class DocumentAltering : MonoBehaviour
                 currentAlterTime += Time.deltaTime;
 
             slider.fillAmount = currentAlterTime / timeToAlter;
+
+            if (currentAlterTime >= timeToAlter)
+            {
+                PlayerStats.instance.money += 500;
+                StopAltering();
+                altered = true;
+            }
         }
     }
 
     public void AlterDocuments()
     {
+        if (altered)
+            return;
+
+        slider.gameObject.transform.parent.gameObject.SetActive(true);
         isbeingAltered = true;
     }
 
     public void StopAltering()
     {
+        if (altered)
+            return;
+
+        slider.gameObject.transform.parent.gameObject.SetActive(false);
         isbeingAltered = false;
         currentAlterTime = 0;
         slider.fillAmount = currentAlterTime / timeToAlter;
@@ -45,6 +60,9 @@ public class DocumentAltering : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (altered)
+            return;
+
         if (collision.tag == "Player")
         {
             inDocumentRange = true;
@@ -52,6 +70,9 @@ public class DocumentAltering : MonoBehaviour
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
+        if (altered)
+            return;
+
         if (collision.tag == "Player")
         {
             inDocumentRange = false;
@@ -61,6 +82,9 @@ public class DocumentAltering : MonoBehaviour
 
     public void OnInteract(InputValue value)
     {
+        if (altered)
+            return;
+
         if (value.isPressed && inDocumentRange)
         {
             AlterDocuments();
