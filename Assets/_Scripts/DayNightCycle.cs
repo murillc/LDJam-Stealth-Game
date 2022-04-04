@@ -83,11 +83,16 @@ public class DayNightCycle : MonoBehaviour
         }
     }
 
-    private void SwitchCycle()
+    public void SwitchCycle()
     {
         if (currentCycle == CycleEnum.DAY)
             currentCycle = CycleEnum.NIGHT;
         else
             currentCycle = CycleEnum.DAY;
+    }
+
+    public void SetCycle(CycleEnum cycle)
+    {
+        this.currentCycle = cycle;
     }
 }

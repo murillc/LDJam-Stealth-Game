@@ -27,6 +27,11 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private Light2D enemyLight;
     [SerializeField] private float turnSpeed;
 
+    [SerializeField] private GameObject dayNightManager;
+    DayNightCycle dayNightCycle;
+
+    [SerializeField] private GameObject caughtText;
+
 
     private GameObject player;
     private FieldOfView fieldOfView;
@@ -70,6 +75,9 @@ public class EnemyMovement : MonoBehaviour
         fieldOfView.SetOrigin(transform.position);
 
         SetTargetPosition(_moveTarget);
+
+        dayNightCycle = dayNightManager.GetComponent<DayNightCycle>();
+        caughtText.SetActive(false);
     }
 
     // Update is called once per frame
@@ -131,7 +139,7 @@ public class EnemyMovement : MonoBehaviour
                             else
                             {
                                 seenPlayerNotHiding = true;
-                               // Debug.Log("Seen player not hiding");
+                                // Debug.Log("Seen player not hiding");
                             }
                         }
                         // continues to be in sight
@@ -229,7 +237,7 @@ public class EnemyMovement : MonoBehaviour
         // Must update view cone after handling movement
         UpdateViewCone();
 
-        
+
 
     }
 
@@ -248,6 +256,26 @@ public class EnemyMovement : MonoBehaviour
         yield return new WaitForSeconds(trapTime);
         state = State.Retreating;
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            // TODO let player know they've been caught
+            PlayerStats.instance.heat += 35;
+            state = State.Trapped;
+            caughtText.SetActive(true);
+            StartCoroutine(Caught());
+        }
+    }
+
+    IEnumerator Caught()
+    {
+        yield return new WaitForSeconds(5f);
+        dayNightCycle.SetCycle(DayNightCycle.CycleEnum.DAY);
+        caughtText.SetActive(false);
+    }
+    
 
 
     private void UpdateViewCone()
