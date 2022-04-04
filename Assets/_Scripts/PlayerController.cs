@@ -44,7 +44,7 @@ public class PlayerController : Singleton<PlayerController>
     private void Update()
     {
         //new Quaternion(0f, 0f, GetAngleFromVector(moveDir), 0f);
-        Quaternion toRotation = Quaternion.LookRotation(Vector3.forward, -moveDir);
+        Quaternion toRotation = Quaternion.LookRotation(Vector3.forward, moveDir);
         playerLight.transform.rotation = Quaternion.RotateTowards(playerLight.transform.rotation, toRotation, turnSpeed * Time.deltaTime);
     }
 
