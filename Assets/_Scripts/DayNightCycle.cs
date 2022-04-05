@@ -27,6 +27,7 @@ public class DayNightCycle : MonoBehaviour
     public GameObject dayObjects;
     public GameObject nightObjects;
     public GameObject playerLight;
+    public GameObject dayCanvasObjects;
 
     private void Awake()
     {
@@ -60,16 +61,18 @@ public class DayNightCycle : MonoBehaviour
             {
                 case CycleEnum.DAY:
                     playerLight.SetActive(false);
-
                     nightObjects.SetActive(false);
+
                     dayObjects.SetActive(true);
+                    dayCanvasObjects.SetActive(true);
                     break;
 
                 case CycleEnum.NIGHT:
                     playerLight.SetActive(true);
-
                     nightObjects.SetActive(true);
+
                     dayObjects.SetActive(false);
+                    dayCanvasObjects.SetActive(false);
 
                     documentManager.SpawnDocumentRandom();
                     break;
@@ -89,6 +92,12 @@ public class DayNightCycle : MonoBehaviour
             currentCycle = CycleEnum.NIGHT;
         else
             currentCycle = CycleEnum.DAY;
+
+        PlayerStats.instance.heat += PlayerStats.instance.heatToGet;
+        PlayerStats.instance.money += PlayerStats.instance.moneyToGet;
+
+        PlayerStats.instance.heatToGet = 0;
+        PlayerStats.instance.moneyToGet = 0;
     }
 
     public void SetCycle(CycleEnum cycle)
