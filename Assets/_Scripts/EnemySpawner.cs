@@ -2,22 +2,35 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemySpawner : MonoBehaviour
+public class EnemySpawner : Singleton<EnemySpawner>
 {
     public bool spawn = true;
-    public float spawnRate = 2f;
+    [System.NonSerialized] public float spawnRate;
     public GameObject enemyPrefab;
+    public Coroutine coroutine;
 
     void Start()
     {
         Random.seed = System.DateTime.Now.Millisecond;
 
-        StartCoroutine(IE_SpawnEnemy());
+        spawnRate = -0.12f * PlayerStats.instance.heat + 15;
+        Debug.Log(spawnRate);
     }
 
     void Update()
     {
+    }
 
+    public void StartSpawningEnemies()
+    {
+        Debug.Log("START SPAWNING");
+        coroutine = StartCoroutine(IE_SpawnEnemy());
+    }
+
+    public void StopSpawningEnemies()
+    {
+        Debug.Log("STOP SPAWNING");
+        StopCoroutine(coroutine);
     }
 
     void SpawnEnemy()
@@ -36,6 +49,8 @@ public class EnemySpawner : MonoBehaviour
 
     IEnumerator IE_SpawnEnemy()
     {
+        Debug.Log("ENUMERATOR");
+
         while (spawn)
         {
             yield return new WaitForSeconds(spawnRate);

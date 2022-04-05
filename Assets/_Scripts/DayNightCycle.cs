@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class DayNightCycle : MonoBehaviour
+public class DayNightCycle : Singleton<DayNightCycle>
 {
     public enum CycleEnum
     {
@@ -28,6 +28,8 @@ public class DayNightCycle : MonoBehaviour
     public GameObject nightObjects;
     public GameObject playerLight;
     public GameObject dayCanvasObjects;
+    public GameObject dayIcon;
+    public GameObject nightIcon;
 
     private void Awake()
     {
@@ -60,17 +62,24 @@ public class DayNightCycle : MonoBehaviour
             switch (currentCycle)
             {
                 case CycleEnum.DAY:
+                    EnemySpawner.instance.StopSpawningEnemies();
                     playerLight.SetActive(false);
                     nightObjects.SetActive(false);
+                    nightIcon.SetActive(false);
 
+                    dayIcon.SetActive(true);
                     dayObjects.SetActive(true);
                     dayCanvasObjects.SetActive(true);
                     break;
 
                 case CycleEnum.NIGHT:
+                    EnemySpawner.instance.StartSpawningEnemies();
+
                     playerLight.SetActive(true);
                     nightObjects.SetActive(true);
+                    nightIcon.SetActive(true);
 
+                    dayIcon.SetActive(false);
                     dayObjects.SetActive(false);
                     dayCanvasObjects.SetActive(false);
 
@@ -89,14 +98,24 @@ public class DayNightCycle : MonoBehaviour
     public void SwitchCycle()
     {
         if (currentCycle == CycleEnum.DAY)
+        {
+            PlayerStats.instance.AddHeat(PlayerStats.instance.heatToGet);
             currentCycle = CycleEnum.NIGHT;
+        }
         else
-            currentCycle = CycleEnum.DAY;
+        {
+            foreach (Transform child in EnemySpawner.instance.transform)
+            {
+                Debug.Log("DESTROYED ENEMY");
+                GameObject.Destroy(child.gameObject);
+            }
 
-        PlayerStats.instance.heat += PlayerStats.instance.heatToGet;
+            currentCycle = CycleEnum.DAY;
+        }
+
         PlayerStats.instance.money += PlayerStats.instance.moneyToGet;
 
-        PlayerStats.instance.heatToGet = 0;
+        //PlayerStats.instance.heatToGet = 0;
         PlayerStats.instance.moneyToGet = 0;
     }
 

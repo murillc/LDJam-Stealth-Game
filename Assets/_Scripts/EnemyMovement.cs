@@ -27,11 +27,9 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private Light2D enemyLight;
     [SerializeField] private float turnSpeed;
 
-    [SerializeField] private GameObject dayNightManager;
-    DayNightCycle dayNightCycle;
+    [SerializeField] private AudioSource deadAudio;
 
-    [SerializeField] private GameObject caughtText;
-
+    private Coroutine yoyo;
 
     private GameObject player;
     private FieldOfView fieldOfView;
@@ -76,8 +74,7 @@ public class EnemyMovement : MonoBehaviour
 
         SetTargetPosition(_moveTarget);
 
-        dayNightCycle = dayNightManager.GetComponent<DayNightCycle>();
-        caughtText.SetActive(false);
+        EnemyUI.instance.caughtText.SetActive(false);
     }
 
     // Update is called once per frame
@@ -248,6 +245,8 @@ public class EnemyMovement : MonoBehaviour
             // TODO play sound scream
             state = State.Trapped;
             StartCoroutine(Retreat());
+            deadAudio.Play(0);
+            GameObject.Destroy(collision.gameObject);
         }
     }
 
@@ -262,18 +261,21 @@ public class EnemyMovement : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             // TODO let player know they've been caught
-            PlayerStats.instance.heat += 35;
+            PlayerStats.instance.AddHeat(35);
             state = State.Trapped;
-            caughtText.SetActive(true);
-            StartCoroutine(Caught());
+            EnemyUI.instance.caughtText.SetActive(true);
+            yoyo = StartCoroutine(Caught());
+
+            DayNightCycle.instance.SwitchCycle();
+            Destroy(this.gameObject);
         }
     }
 
     IEnumerator Caught()
     {
         yield return new WaitForSeconds(5f);
-        dayNightCycle.SetCycle(DayNightCycle.CycleEnum.DAY);
-        caughtText.SetActive(false);
+        DayNightCycle.instance.SetCycle(DayNightCycle.CycleEnum.DAY);
+        EnemyUI.instance.caughtText.SetActive(false);
     }
     
 
