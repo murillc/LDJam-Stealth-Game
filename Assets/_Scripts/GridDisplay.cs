@@ -98,8 +98,8 @@ public class GridDisplay : Singleton<GridDisplay>
         //Spawn depending on parent position, place in array, and with half width and height offset because the pivot is in the center instead of bottom left, spawning them incorrectly
         cellT.position = new Vector3(transform.position.x + (x * cellSize) + cellSize / 2, transform.position.y + (y * cellSize) + cellSize / 2, 0);
 
-        TextMeshPro textMesh = allCells[x, y].GetComponentInChildren<TextMeshPro>();
-        textMesh.text = "[" + x + ", " + y + "]";
+        //TextMeshPro textMesh = allCells[x, y].GetComponentInChildren<TextMeshPro>();
+        //textMesh.text = "[" + x + ", " + y + "]";
 
         allCells[x, y].SetActive(false);
     }
