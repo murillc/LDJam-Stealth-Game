@@ -31,7 +31,10 @@ public class PlayerStats : Singleton<PlayerStats>
         Debug.Log(EnemySpawner.instance.spawnRate);
 
         if (this.heat > 100)
+        {
+            PlayerStatsKeeper.money = money;
             SceneManager.LoadScene("Exit");
+        } 
     }
 
     public void CalculateHeatPenalty(float value)

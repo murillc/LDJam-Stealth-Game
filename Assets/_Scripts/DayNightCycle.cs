@@ -30,6 +30,7 @@ public class DayNightCycle : Singleton<DayNightCycle>
     public GameObject dayCanvasObjects;
     public GameObject dayIcon;
     public GameObject nightIcon;
+    public GameObject finishDaytimeBtn;
 
     private void Awake()
     {
@@ -66,6 +67,7 @@ public class DayNightCycle : Singleton<DayNightCycle>
                     playerLight.SetActive(false);
                     nightObjects.SetActive(false);
                     nightIcon.SetActive(false);
+                    finishDaytimeBtn.SetActive(true);
 
                     dayIcon.SetActive(true);
                     dayObjects.SetActive(true);
@@ -79,6 +81,7 @@ public class DayNightCycle : Singleton<DayNightCycle>
                     nightObjects.SetActive(true);
                     nightIcon.SetActive(true);
 
+                    finishDaytimeBtn.SetActive(false);
                     dayIcon.SetActive(false);
                     dayObjects.SetActive(false);
                     dayCanvasObjects.SetActive(false);

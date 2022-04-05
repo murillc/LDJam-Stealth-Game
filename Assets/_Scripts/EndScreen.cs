@@ -9,6 +9,6 @@ public class EndScreen : MonoBehaviour
 
     private void Start()
     {
-        finalMoneyText.text = PlayerStats.instance.money.ToString();
+        finalMoneyText.text = PlayerStatsKeeper.money.ToString();
     }
 }
